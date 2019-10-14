@@ -18,7 +18,7 @@ str4 = "* Printing contents of current directory."
 spacer_line = " "
 astr_line = "*"
 dash_line =    "*----------------------------------------------------------------------------------------------------------------------"
-str_header_1 = "* PYLOPE Search Report                                                                                   as of:    "
+str_header_1 = "* PYLOPE Search Report                                                        as of:    "
 str_search_cnt = "Total of search items found "
 str_tot_1      = "Total search cnt for  ["
 str_tot_2      = "] : "
@@ -45,6 +45,17 @@ def ondelete():
         if next_value.isspace():
             l.delete(index)
 
+def onsaveas():
+    import tkinter.filedialog
+    files = [('Text Document', '*.txt'),
+             ('All Files', '*.*'),  
+             ('Python Files', '*.py')] 
+    f = tkinter.filedialog.asksaveasfile(filetypes = files, defaultextension = files, mode='w') 
+    if f is None: # asksaveasfile return `None` if dialog closed with "cancel".
+        return
+    text2save = str(l.get(1, END)).replace(",", "\n") # starts from `1.0`, not `0.0`
+    f.write(text2save)
+    f.close()
 
 #----------------------------------------#
 def get_filenames():
@@ -104,7 +115,7 @@ if len(sys.argv) >= 2:
 
         #now = str(datetime.now())
         now = datetime.now()
-        now = str(now.strftime("%A, %d. %B %Y %I:%M%p"))
+        now = str(now.strftime("%A %d. %B %Y %I:%M%p"))
         str_header_1 = str(str_header_1)
         str_header_1 = str_header_1 + now
         str_search_cnt = str(str_search_cnt)
@@ -165,10 +176,12 @@ else:
 
 
 l.bind('<<ListboxSelect>>', onselect)
-root.bind("deleteButton", ondelete)  
+root.bind("deleteButton", ondelete)
+root.bind("saveasButton", onsaveas)  
 deleteButton = Button(root, text='Delete', underline = 0, command=ondelete)
 deleteButton.grid(column=1, row=1, sticky="e", padx=10, pady=10)
-
+saveasButton = Button(root, text='Save As', underline = 0, command=onsaveas)
+saveasButton.grid(column=0, row=1, sticky="e", padx=10, pady=10)
 
 
 root.mainloop()
