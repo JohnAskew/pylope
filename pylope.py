@@ -84,7 +84,7 @@ class MyFrame(tk.Frame):
     def __init__(self, parent, **kwargs):
         super().__init__(parent, **kwargs)
         self.pack()
-        self.myLabel1 = tk.Label(parent, fg='DARKRED',bg='YELLOW', text='EXASOL Log Open, Parse & Extract utility (Elope)')
+        self.myLabel1 = tk.Label(parent, fg='DARKRED',bg='YELLOW', text='Python Log Open, Parse & Extract utility (PYlope)')
         self.myLabel1.pack()
         self.mySubmitButton1 = tk.Button(parent, anchor=W, fg='BLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string', command=self.get_group_name)
         separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
@@ -96,9 +96,6 @@ class MyFrame(tk.Frame):
         c = Checkbutton(root, text="Any Case", variable=self.var_case, command=self.cb_case, activebackground = 'GREEN')
         c.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=10, height=-1)
         c.pack(side=LEFT, padx=5, pady=5)
-        # d = Checkbutton(root, text="Whole word", variable=self.var_whole, command=self.cb_whole, activebackground = 'GREEN')
-        # d.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=10, height=0, state=DISABLED)
-        # d.pack( padx=5, pady=5, side=RIGHT)
         e = Checkbutton(root, text="Bypass search", variable=self.var_clear, command=self.cb_clear, activebackground = 'GREEN')
         e.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=10, height=0)
         e.pack( padx=5, pady=5,side=RIGHT)
