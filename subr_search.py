@@ -10,7 +10,6 @@ except:
 
 sysarg_len = 3 #Maximum number of arguments passed from main program
 index = 0
-
 str1 =         "***********************************************************"
 str2 = "* NO Search string supplied"
 str3 = "* OR no Log file was supplied."
@@ -29,21 +28,19 @@ str_details =  "*-------------------------------------------------- D E T A I L 
 def onselect(evt):
     # Note here that Tkinter passes an event object to onselect()
     w = evt.widget
-    global index
-    index = int(w.curselection()[0])
-    value = w.get(index)
+    global index_start
+    index_start = int(w.curselection()[0])
+    global curr_sel
+    curr_sel = w.curselection()
+    value = w.get(index_start)
     global next_value
-    next_value = w.get(index + 1)
+    next_value = w.get(index_start+ 1)
 
 
     
 def ondelete():
-
-    #l.delete(tk.ANCHOR) #sel_indx)
-    if index > 0:
-        l.delete(index)
-        if next_value.isspace():
-            l.delete(index)
+    for i in curr_sel[::-1]:  #w.curselection()[::-1]:
+        l.delete(i)
 
 def onsaveas():
     import tkinter.filedialog
@@ -99,7 +96,7 @@ def get_filenames():
 root = Tk()
 if len(sys.argv) >= 2:
     if sys.argv[1] != " ":
-        l = Listbox(root, height=25, width=120, bg='YELLOW', fg='BLUE', selectmode = "EXTENDED")
+        l = Listbox(root, height=25, width=120, bg='YELLOW', fg='BLUE', selectmode='multiple')
         l.master.title(">>> Elope search results <<<")
         l.grid(column=0, row=0, sticky=(N,E,W,S))
         r = ttk.Scrollbar(root, orient=HORIZONTAL, command=l.xview)
@@ -130,7 +127,7 @@ if len(sys.argv) >= 2:
                  background = 'WHITE',
                  selectbackground = 'ORANGE',
                  selectforeground = 'BLACK',
-                 selectmode = 'EXTENDED')
+                 selectmode='multiple')
         l.insert(END, dash_line)
         l.insert(END, str_header_1)
         l.insert(END, dash_line)
@@ -142,7 +139,7 @@ if len(sys.argv) >= 2:
                      background = 'YELLOW',
                      selectbackground = 'ORANGE',
                      selectforeground = 'DARKBLUE',
-                     selectmode = 'EXTENDED')
+                     selectmode='multiple')
             l.insert(END, dash_line)
             l.insert(END, str_details)
             l.insert(END, dash_line)
@@ -170,7 +167,7 @@ else:
              background = 'WHITE',
              selectbackground = 'ORANGE',
              selectforeground = 'DARKBLUE',
-             selectmode = 'MULTIPLE')
+             selectmode='multiple')
     for filename in get_filenames():
         l.insert(END, filename)
 
