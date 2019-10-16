@@ -73,8 +73,9 @@ class MainWindow():
         global p_clear
         p_clear = 0
 
-
+    #--------------------------------------#
     def set_callback(self, a_func):
+    #--------------------------------------#
         self.callback = a_func
 
 
@@ -198,6 +199,28 @@ def extract_tgz(f):
                 call_subr_search()
     tar.close()
 #--------------------------------------#
+def extract_tar(file):
+#--------------------------------------#
+    dir = os.path.dirname(file) # get directory where file is stored
+    filename = os.path.basename(file) # get filename
+    file_base, file_suffix = filename.split('.')
+    file_tar, file_tar_ext = os.path.splitext(file) # split into file.tar and .gz
+    file_untar, file_untar_ext = os.path.splitext(file_tar) #split into file and .tar
+    os.chdir(dir)
+    tar = tarfile.open(file, mode = 'r')
+    for i in tar.getnames():
+        try:
+            if i.startswith(file_base):
+                tar.extract(i, path=dir)
+            else:
+                tar.extract(i, path=file_untar)
+        except:
+            print("extract_tar function unable to extract", i, "...skipping on.")
+    tar.close()
+    os.chdir(file_untar)
+    call_subr_search()
+
+#--------------------------------------#
 def main_logic_tar_gz():
 #--------------------------------------#
     f = tkinter.filedialog.askopenfilename(
@@ -212,6 +235,10 @@ def main_logic_tar_gz():
                    ('7zip', '.7z')]
 
         )
+    if (f.endswith("tar")):
+        directory = os.path.split(f)[0]
+        os.chdir(directory)
+        extract_tar(f)
 
     if (f.endswith("tgz")):
         directory = os.path.split(f)[0]
@@ -246,14 +273,8 @@ def main_logic_directory():
 mf = MyFrame(root)
 b_dir = tkinter.Button(root, text='Open Directory to search', command=main_logic_directory)
 b_gz = tkinter.Button(root, text='Open & Extract tar.gz to search', command=main_logic_tar_gz)
-    
-
-
 separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
 separator.pack(fill=X, padx=5, pady=5)
-
 b_dir.pack(fill='x')
 b_gz.pack(fill='x')
-
-
 root.mainloop()

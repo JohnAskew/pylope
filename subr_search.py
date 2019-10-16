@@ -10,7 +10,8 @@ except:
 
 sysarg_len = 3 #Maximum number of arguments passed from main program
 index = 0
-str1 =         "***********************************************************"
+dir_path = os.getcwd()
+str1 = "***********************************************************"
 str2 = "* NO Search string supplied"
 str3 = "* OR no Log file was supplied."
 str4 = "* Printing contents of current directory."
@@ -23,6 +24,7 @@ str_tot_1      = "Total search cnt for  ["
 str_tot_2      = "] : "
 str_tot_2b     = "] "
 str_any_case   = "( any case ) : "
+str_dir        = "Path : "
 str_details =  "*-------------------------------------------------- D E T A I L S ------------------------------------------------------"
 
 def onselect(evt):
@@ -131,6 +133,9 @@ if len(sys.argv) >= 2:
         l.insert(END, dash_line)
         l.insert(END, str_header_1)
         l.insert(END, dash_line)
+        l.insert(END, astr_line)
+        str_dir = str_dir + dir_path
+        l.insert(END, str_dir)
         l.insert(END, astr_line)
         l.insert(END, str_search_cnt)
         l.insert(END, astr_line)
