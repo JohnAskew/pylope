@@ -42,13 +42,9 @@ sysarg_len = 4 #Number of arguments I can pass
 user = getpass.getuser()
 root = tkinter.Tk()
 dir_path = os.path.dirname(os.path.realpath(__file__))
-
 p = " " #Default placeholder = poor programmming, that's why
-
 p_case = 0 #Default placeholder - again, poor programming, that's why
-
 p_whole = 0 #Default placeholder
-
 p_clear = 0
 #======================================#
 class MainWindow():
@@ -79,9 +75,9 @@ class MainWindow():
         self.callback = a_func
 
 
-#--------------------------------------#
+#======================================#
 class MyFrame(tk.Frame):
-#--------------------------------------#
+#======================================#
     def __init__(self, parent, **kwargs):
         super().__init__(parent, **kwargs)
         self.pack()
@@ -138,47 +134,57 @@ class MyFrame(tk.Frame):
 #--------------------------------------#
         self.myLabel1['text'] = astr
 
+#======================================#
+# End Class
+#======================================#
+
 #--------------------------------------#
 def call_subr_search():
 #--------------------------------------#
+    subprocess.call(["python", dir_path + "/" + "subr_call_search.py",  p, str(p_case), str(p_whole), str(p_clear) ])
 
+#--------------------------------------#
+def process_tar_gz(f):
+#--------------------------------------#
+
+
+    if (f.endswith("tar")):
+        extract_tar(f)
+
+    if (f.endswith("tgz")):
+        extract_tgz(f)
  
-    if p_clear == 1:
-        subprocess.call(["python", dir_path + "/" + "subr_search.py"])
-    elif (p > " ") & (p_case == 1) & (p_whole == 1):
-        subprocess.call(["python", dir_path + "/" + "subr_search.py", p, str(p_case), str(p_whole)])
-    elif (p > " ") & (p_case == 1):
-        subprocess.call(["python", dir_path + "/" + "subr_search.py", p, str(p_case)])
-    elif p > " ":
-       subprocess.call(["python", dir_path + "/" + "subr_search.py", p])
-    else:
-        subprocess.call(["python", dir_path + "/" + "subr_search.py"])
+    if (f.endswith("gz")):
+        extract_gz(f)
+
+
 #--------------------------------------#
 def extract_gz(file):
 #--------------------------------------#
     dir = os.path.dirname(file) # get directory where file is stored
-    
+    #os.chdir(dir)
     filename = os.path.basename(file) # get filename
     
     file_tar, file_tar_ext = os.path.splitext(file) # split into file.tar and .gz
     
     file_untar, file_untar_ext = os.path.splitext(file_tar) #split into file and .tar
     
-    os.chdir(dir)
+    #os.chdir(dir)
 
     if file_tar_ext == ".gz" and file_untar_ext == ".tar":
         if not os.path.exists(file_untar):
             os.mkdir(file_untar) 
+
         tar = tarfile.open(filename)
 
         for i in tar.getmembers():
             try:
                 tar.extract(i, path=file_untar)
-                
+
             except:
-                print("Unable to extract:", i)
+                print("Unable to extract:", i ,"to:", file_untar, "The current directory is:", os.getcwd())
         tar.close()
-        
+     
         os.chdir(file_untar)
         
         call_subr_search()
@@ -235,21 +241,10 @@ def main_logic_tar_gz():
                    ('7zip', '.7z')]
 
         )
-    if (f.endswith("tar")):
-        directory = os.path.split(f)[0]
-        os.chdir(directory)
-        extract_tar(f)
-
-    if (f.endswith("tgz")):
-        directory = os.path.split(f)[0]
-        os.chdir(directory)
-        extract_tgz(f)
- 
-    if (f.endswith("gz")):
-        directory = os.path.split(f)[0]
-        tail = os.path.split(f)[1]
-        os.chdir(directory)
-        extract_gz(f)
+    directory = os.path.split(f)[0]
+    os.chdir(directory)
+    process_tar_gz(f)
+    
 #--------------------------------------#
 def main_logic_directory():
 #--------------------------------------#
@@ -265,7 +260,29 @@ def main_logic_directory():
         os.chdir(f)
         call_subr_search()
 
+#--------------------------------------#
+def main_logic_xp():
+#--------------------------------------#
+    b_xp.configure(bg='RED', fg='WHITE', text='Currently Extracting >> ALL << gz', font='Arial 8 bold')
+    f = tkinter.filedialog.askdirectory(
 
+        parent=root, initialdir='C:\\Users\\%s\\Downloads' % user,
+
+        title='Choose directory'
+
+        )
+    if os.path.exists(f):
+        os.chdir(f)
+        for dirName, subdirList, fileList in os.walk(f):
+            #print('Found directory %s ' % dirName)
+            for fname in fileList:
+                if fname.endswith("gz"):
+                    print("xploding {} gz file: {}".format(dirName, fname))
+                    curr_dir = os.getcwd()
+                    os.chdir(dirName)
+                    process_tar_gz(fname)
+                    os.chdir(curr_dir)
+    b_xp.configure(text='Extract >> ALL << gz in Directory', bg='LIGHTGRAY', fg='BLACK', font='TkDefaultFont')
 #####################################
 # M A I N   L O G I C
 #####################################
@@ -273,8 +290,10 @@ def main_logic_directory():
 mf = MyFrame(root)
 b_dir = tkinter.Button(root, text='Open Directory to search', command=main_logic_directory)
 b_gz = tkinter.Button(root, text='Open & Extract tar.gz to search', command=main_logic_tar_gz)
+b_xp = tkinter.Button(root, text='Extract >> ALL << gz in Directory', command=main_logic_xp, bg='LIGHTGRAY')
 separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
 separator.pack(fill=X, padx=5, pady=5)
 b_dir.pack(fill='x')
 b_gz.pack(fill='x')
+b_xp.pack(fill='x')
 root.mainloop()

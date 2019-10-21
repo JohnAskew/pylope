@@ -7,10 +7,21 @@ try:
 except:
     os.system('pip install datetime')
     from datetime import datetime
+try:
+    import subprocess
+except:
+    os.system('pip install subprocess')
+    import subprocess
+try:
+    import webbrowser
+except:
+    os.system('pip install webbrowser')
+    import webbrowser
 
-sysarg_len = 3 #Maximum number of arguments passed from main program
+dir_path = os.path.dirname(os.path.realpath(__file__))
+sysarg_len = 5 #Maximum number of arguments passed from main program
 index = 0
-dir_path = os.getcwd()
+#dir_path = os.getcwd()
 str1 = "***********************************************************"
 str2 = "* NO Search string supplied"
 str3 = "* OR no Log file was supplied."
@@ -26,8 +37,11 @@ str_tot_2b     = "] "
 str_any_case   = "( any case ) : "
 str_dir        = "Path : "
 str_details =  "*-------------------------------------------------- D E T A I L S ------------------------------------------------------"
+str_tot_search = None
 
+#--------------------------------------#
 def onselect(evt):
+#--------------------------------------#
     # Note here that Tkinter passes an event object to onselect()
     w = evt.widget
     global index_start
@@ -38,13 +52,36 @@ def onselect(evt):
     global next_value
     next_value = w.get(index_start+ 1)
 
+#--------------------------------------#
+def openfile(event):
+#--------------------------------------#
+    x = int(l.curselection()[0])
+    label = l.get(x).split()[0]
+
+    try:
+        if len(str_tot_search) > 0:
+            subprocess.call(["python", dir_path + "/" + "viewpad.py",  label , str_tot_search])
+        else:
+            subprocess.call(["python", dir_path + "/" + "viewpad.py",  label ])
+    except:
+        try:
+            os.system(r'notepad.exe ' + label)
+        except:
+            try:
+                webbrowser.open(label)
+            except:
+                os.system(l.get(x))
 
     
+#--------------------------------------#
 def ondelete():
+#--------------------------------------#
     for i in curr_sel[::-1]:  #w.curselection()[::-1]:
         l.delete(i)
 
+#--------------------------------------#
 def onsaveas():
+#--------------------------------------#
     import tkinter.filedialog
     files = [('Text Document', '*.txt'),
              ('All Files', '*.*'),  
@@ -59,6 +96,7 @@ def onsaveas():
 #----------------------------------------#
 def get_filenames():
 #----------------------------------------#
+    
     if (len(sys.argv) < 2):
         return os.listdir('.')
     else:
@@ -71,9 +109,8 @@ def get_filenames():
                     with open(i, encoding="utf8") as x:
                         line = x.readline()
                         cnt = 1
-                        
                         while line:
-                            if (len(sys.argv) == sysarg_len):
+                            if (len(sys.argv) > 2):
                                 if (sys.argv[2] == '1'):
                                     z = line.lower().find(myString.lower())
                                 else:
@@ -83,7 +120,7 @@ def get_filenames():
                             if z > -1:
                                 search_cnt += 1
                                 #DEBUG print("search_cnt:", search_cnt, "File {} : Line {} : offset {}: {}".format(i, cnt, z, line.strip()))
-                                stringList.append("File {} : Line {} : offset {}:      {}".format(i, cnt, z, line.strip()))
+                                stringList.append("{} : Line {} : offset {}:      {}".format(i, cnt, z, line.strip()))
                                 
                             line = x.readline()
                             cnt += 1
@@ -94,7 +131,9 @@ def get_filenames():
             return stringList, search_cnt
 
 
-
+########################################
+# M A I N   L O G I C
+########################################
 root = Tk()
 if len(sys.argv) >= 2:
     if sys.argv[1] != " ":
@@ -111,8 +150,6 @@ if len(sys.argv) >= 2:
         root.grid_columnconfigure(0, weight=1)
         root.grid_rowconfigure(0, weight=1)
         getfilenames, search_cnt = get_filenames()
-
-        #now = str(datetime.now())
         now = datetime.now()
         now = str(now.strftime("%A %d. %B %Y %I:%M%p"))
         str_header_1 = str(str_header_1)
@@ -178,6 +215,7 @@ else:
 
 
 l.bind('<<ListboxSelect>>', onselect)
+l.bind("<Button-3>", openfile)
 root.bind("deleteButton", ondelete)
 root.bind("saveasButton", onsaveas)  
 deleteButton = Button(root, text='Delete', underline = 0, command=ondelete)
