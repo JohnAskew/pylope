@@ -55,14 +55,15 @@ def onselect(evt):
 #--------------------------------------#
 def openfile(event):
 #--------------------------------------#
-    x = int(l.curselection()[0])
+    #x = int(l.curselection()[0])
+    x = index_start
     label = l.get(x).split()[0]
 
     try:
         if len(str_tot_search) > 0:
-            subprocess.call(["python", dir_path + "/" + "viewpad.py",  label , str_tot_search])
+            subprocess.Popen(["python", dir_path + "/" + "viewpad.py",  label , str_tot_search])
         else:
-            subprocess.call(["python", dir_path + "/" + "viewpad.py",  label ])
+            subprocess.Popen(["python", dir_path + "/" + "viewpad.py",  label ])
     except:
         try:
             os.system(r'notepad.exe ' + label)
@@ -77,7 +78,10 @@ def openfile(event):
 def ondelete():
 #--------------------------------------#
     for i in curr_sel[::-1]:  #w.curselection()[::-1]:
-        l.delete(i)
+        try:
+            l.delete(i)
+        except:
+            print("PYLope Sub Routine subr_search.py function ondelete unable to determine cursor position. Try setting cursor and retrying")
 
 #--------------------------------------#
 def onsaveas():
@@ -138,7 +142,7 @@ root = Tk()
 if len(sys.argv) >= 2:
     if sys.argv[1] != " ":
         l = Listbox(root, height=25, width=120, bg='YELLOW', fg='BLUE', selectmode='multiple')
-        l.master.title(">>> Elope search results <<<")
+        l.master.title(">>> PYlope search results <<<")
         l.grid(column=0, row=0, sticky=(N,E,W,S))
         r = ttk.Scrollbar(root, orient=HORIZONTAL, command=l.xview)
         r.grid(column=0, row=1, sticky=(E,W))
@@ -171,7 +175,7 @@ if len(sys.argv) >= 2:
         l.insert(END, str_header_1)
         l.insert(END, dash_line)
         l.insert(END, astr_line)
-        str_dir = str_dir + dir_path
+        str_dir = str_dir + os.getcwd()
         l.insert(END, str_dir)
         l.insert(END, astr_line)
         l.insert(END, str_search_cnt)
@@ -215,6 +219,7 @@ else:
 
 
 l.bind('<<ListboxSelect>>', onselect)
+l.bind('<FocusOut>', lambda e: l.selection_clear(0, END))
 l.bind("<Button-3>", openfile)
 root.bind("deleteButton", ondelete)
 root.bind("saveasButton", onsaveas)  

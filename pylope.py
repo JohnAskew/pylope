@@ -68,6 +68,11 @@ class MainWindow():
         self.top.destroy()
         global p_clear
         p_clear = 0
+        b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
+        b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
+        if len(p) > 0:
+            x = "Searching >> " + p
+            mf.mySubmitButton1.config(text = x)
 
     #--------------------------------------#
     def set_callback(self, a_func):
@@ -90,12 +95,13 @@ class MyFrame(tk.Frame):
         self.var_case = IntVar()
         self.var_whole = IntVar()
         self.var_clear = IntVar()
-        c = Checkbutton(root, text="Any Case", variable=self.var_case, command=self.cb_case, activebackground = 'GREEN')
-        c.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=10, height=-1)
-        c.pack(side=LEFT, padx=5, pady=5)
-        e = Checkbutton(root, text="Bypass search", variable=self.var_clear, command=self.cb_clear, activebackground = 'GREEN')
-        e.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=10, height=0)
-        e.pack( padx=5, pady=5,side=RIGHT)
+        global c
+        self.c = Checkbutton(root, text="Any Case", variable=self.var_case, command=self.cb_case, activebackground = 'GREEN',state=DISABLED)
+        self.c.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=10, height=-1)
+        self.c.pack(side=TOP, padx=5, pady=5)
+        self.e = Checkbutton(root, text="Bypass search; Just list contents", variable=self.var_clear, command=self.cb_clear, activebackground = 'GREEN')
+        self.e.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=25, height=0)
+        self.e.pack( padx=5, pady=5,side=BOTTOM)
         
 
 
@@ -104,6 +110,7 @@ class MyFrame(tk.Frame):
 #--------------------------------------#
         global p_case
         p_case = self.var_case.get()
+        return p_case
 
 #--------------------------------------#
     def cb_whole(self):
@@ -119,6 +126,8 @@ class MyFrame(tk.Frame):
         if p_clear == 1:
             p = " "
             p_case = 0
+        b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
+        b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
   
 #--------------------------------------#
     def get_group_name(self):
@@ -127,6 +136,7 @@ class MyFrame(tk.Frame):
 
         # provide callback to MainWindow so that it can return results to MyFrame
         mw.set_callback(self.set_label)
+        self.c.config(state=NORMAL)
 
 
 #--------------------------------------#
@@ -144,7 +154,7 @@ def call_subr_search():
     subprocess.call(["python", dir_path + "/" + "subr_call_search.py",  p, str(p_case), str(p_whole), str(p_clear) ])
 
 #--------------------------------------#
-def process_tar_gz(f):
+def process_tar_gz(f, call=1):
 #--------------------------------------#
 
 
@@ -242,8 +252,11 @@ def main_logic_tar_gz():
 
         )
     directory = os.path.split(f)[0]
-    os.chdir(directory)
-    process_tar_gz(f)
+    try:
+        os.chdir(directory)
+        process_tar_gz(f)
+    except:
+        print("PYlope function: main_logic_tar_gz unable to change directory", directory)
     
 #--------------------------------------#
 def main_logic_directory():
@@ -283,17 +296,26 @@ def main_logic_xp():
                     process_tar_gz(fname)
                     os.chdir(curr_dir)
     b_xp.configure(text='Extract >> ALL << gz in Directory', bg='LIGHTGRAY', fg='BLACK', font='TkDefaultFont')
+
+
+
 #####################################
 # M A I N   L O G I C
 #####################################
 
 mf = MyFrame(root)
-b_dir = tkinter.Button(root, text='Open Directory to search', command=main_logic_directory)
-b_gz = tkinter.Button(root, text='Open & Extract tar.gz to search', command=main_logic_tar_gz)
-b_xp = tkinter.Button(root, text='Extract >> ALL << gz in Directory', command=main_logic_xp, bg='LIGHTGRAY')
+b_dir = tkinter.Button(root, state=DISABLED, text='Open Directory to search', command=main_logic_directory)
+b_gz = tkinter.Button(root, state=DISABLED, text='Open & Extract tar.gz to search', command=main_logic_tar_gz)
+b_xp = tkinter.Button(root,  text='Extract >> ALL << gz in Directory', command=main_logic_xp, bg='LIGHTGRAY')
 separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
 separator.pack(fill=X, padx=5, pady=5)
+ttk.Label(root, text='Search Utilities').pack()
+ttk.Separator(root,orient=HORIZONTAL).pack(fill=X)
 b_dir.pack(fill='x')
 b_gz.pack(fill='x')
+separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
+separator.pack(fill=X, padx=5, pady=5)
+ttk.Label(root, text='Extract Utilities').pack()
+ttk.Separator(root,orient=HORIZONTAL).pack(fill=X)
 b_xp.pack(fill='x')
 root.mainloop()
