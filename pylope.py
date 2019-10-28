@@ -88,7 +88,7 @@ class MyFrame(tk.Frame):
         self.pack()
         self.myLabel1 = tk.Label(parent, fg='DARKRED',bg='YELLOW', text='Python Log Open, Parse & Extract utility (PYlope)')
         self.myLabel1.pack()
-        self.mySubmitButton1 = tk.Button(parent, anchor=W, fg='BLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string', command=self.get_group_name)
+        self.mySubmitButton1 = tk.Button(parent, anchor=N, fg='BLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string', command=self.get_group_name)
         separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
         separator.pack(fill=X, padx=5, pady=5)
         self.mySubmitButton1.pack()
@@ -99,9 +99,9 @@ class MyFrame(tk.Frame):
         self.c = Checkbutton(root, text="Any Case", variable=self.var_case, command=self.cb_case, activebackground = 'GREEN',state=DISABLED)
         self.c.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=10, height=-1)
         self.c.pack(side=TOP, padx=5, pady=5)
-        self.e = Checkbutton(root, text="Bypass search; Just list contents", variable=self.var_clear, command=self.cb_clear, activebackground = 'GREEN')
+        self.e = Checkbutton(root, text="Clear search; Just list contents", variable=self.var_clear, command=self.cb_clear, activebackground = 'GREEN')
         self.e.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=25, height=0)
-        self.e.pack( padx=5, pady=5,side=BOTTOM)
+        self.e.pack( padx=5, pady=5,side=TOP)
         
 
 
@@ -121,13 +121,18 @@ class MyFrame(tk.Frame):
 #--------------------------------------#
     def cb_clear(self):
 #--------------------------------------#
-        global p_clear
+        global p_clear, p_case, p
         p_clear = self.var_clear.get()
         if p_clear == 1:
             p = " "
             p_case = 0
-        b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
-        b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
+            b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
+            b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
+            mf.mySubmitButton1.config(fg='BLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string')
+
+        if  (p == None or p == " ") and p_clear == 0:
+            b_gz.config(state=DISABLED, bg='LIGHTGRAY', fg='BLACK')
+            b_dir.config(state=DISABLED, bg='LIGHTGRAY', fg='BLACK')
   
 #--------------------------------------#
     def get_group_name(self):
@@ -157,19 +162,18 @@ def call_subr_search():
 def process_tar_gz(f, call=1):
 #--------------------------------------#
 
-
     if (f.endswith("tar")):
-        extract_tar(f)
+        extract_tar(f, call)
 
     if (f.endswith("tgz")):
-        extract_tgz(f)
+        extract_tgz(f, call)
  
     if (f.endswith("gz")):
-        extract_gz(f)
+        extract_gz(f, call)
 
 
 #--------------------------------------#
-def extract_gz(file):
+def extract_gz(file, call = 1):
 #--------------------------------------#
     dir = os.path.dirname(file) # get directory where file is stored
     #os.chdir(dir)
@@ -196,11 +200,14 @@ def extract_gz(file):
         tar.close()
      
         os.chdir(file_untar)
-        
-        call_subr_search()
+        if call:
+            call_subr_search()
+        #DEBUG else:
+            #DEBUG print("extract_gz bypassing call_subr_search with call", call)
 #--------------------------------------#
-def extract_tgz(f):
+def extract_tgz(f, call =  1):
 #--------------------------------------#
+    #DEBUG print("entering extract_tgz with call:", call)
     tar = gzip.open(f, 'rb')
     tar = tarfile.open(f, "r:gz")
     tar.extractall()
@@ -211,12 +218,15 @@ def extract_tgz(f):
             if os.path.isdir(filename):
                 os.chdir(filename)
                 cnt +=1
-        
-                call_subr_search()
+                if call:
+                    call_subr_search()
+                #DEBUG else:
+                    #DEBUG print("extract_tgz bypassing call_subr_search with call:", call)
     tar.close()
 #--------------------------------------#
-def extract_tar(file):
+def extract_tar(file, call = 1):
 #--------------------------------------#
+    #DEBUG print("entering extract_tar with call:", call)
     dir = os.path.dirname(file) # get directory where file is stored
     filename = os.path.basename(file) # get filename
     file_base, file_suffix = filename.split('.')
@@ -234,7 +244,10 @@ def extract_tar(file):
             print("extract_tar function unable to extract", i, "...skipping on.")
     tar.close()
     os.chdir(file_untar)
-    call_subr_search()
+    if call:
+        call_subr_search()
+    #DEBUG else:
+        #DEBUG print("extract_tar bypassing call_subr_search with call:", call)
 
 #--------------------------------------#
 def main_logic_tar_gz():
@@ -252,6 +265,7 @@ def main_logic_tar_gz():
 
         )
     directory = os.path.split(f)[0]
+
     try:
         os.chdir(directory)
         process_tar_gz(f)
@@ -291,13 +305,57 @@ def main_logic_xp():
             for fname in fileList:
                 if fname.endswith("gz"):
                     print("xploding {} gz file: {}".format(dirName, fname))
+                    b_xp.configure(bg='RED', fg='WHITE', text="exploding {} gz file: {}".format(dirName, fname), font='Arial 8 bold')
                     curr_dir = os.getcwd()
                     os.chdir(dirName)
-                    process_tar_gz(fname)
+                    call = 0
+                    #DEBUG print("main_logic_xp calling process_tar_gz with call:", call)
+                    process_tar_gz(fname, call)
+
                     os.chdir(curr_dir)
     b_xp.configure(text='Extract >> ALL << gz in Directory', bg='LIGHTGRAY', fg='BLACK', font='TkDefaultFont')
 
+#--------------------------------------#
+def main_logic_xpg():
+#--------------------------------------#
+    b_xpg.configure(bg='RED', fg='WHITE', text='Currently Extracting >> ALL << in tar.gz', font='Arial 8 bold')
 
+    f = tkinter.filedialog.askopenfilename(
+
+        parent=root, initialdir='C:\\Users\\%s\\Downloads' % user,
+
+        title='Choose file',
+
+        filetypes=[('tar zip', '.tar.gz .tgz'),
+                   ('tar', '.tar'),
+                   ('gunzip', '.gz'),
+                   ('7zip', '.7z')]
+
+        )
+    directory = os.path.split(f)[0]
+    print("main_logic_xpg before call with directory:", directory, "file:", f)
+    try:
+        os.chdir(directory)
+        process_tar_gz(f)
+    except:
+        print("PYlope function: main_logic_xpg unable to change directory", directory)
+    print("main_logic_xpg using directory:", directory, "for Treewalk of main_logic_xp")
+    if os.path.exists(directory):
+        os.chdir(directory)
+        for dirName, subdirList, fileList in os.walk(directory):
+            #print('Found directory %s ' % dirName)
+            for fname in fileList:
+                if fname.endswith("gz"):
+                    print("xploding {} gz file: {}".format(dirName, fname))
+                    b_xpg.configure(bg='RED', fg='WHITE', text="exploding {} gz file: {}".format(dirName, fname), font='Arial 8 bold')
+                    curr_dir = os.getcwd()
+                    os.chdir(dirName)
+                    call = 0
+                    #DEBUG print("main_logic_xp calling process_tar_gz with call:", call)
+                    process_tar_gz(fname, call)
+
+                    os.chdir(curr_dir)
+    b_xpg.configure(text='Extract >> ALL << in tar.gz', bg='LIGHTGRAY', fg='BLACK', font='TkDefaultFont')
 
 #####################################
 # M A I N   L O G I C
@@ -307,6 +365,7 @@ mf = MyFrame(root)
 b_dir = tkinter.Button(root, state=DISABLED, text='Open Directory to search', command=main_logic_directory)
 b_gz = tkinter.Button(root, state=DISABLED, text='Open & Extract tar.gz to search', command=main_logic_tar_gz)
 b_xp = tkinter.Button(root,  text='Extract >> ALL << gz in Directory', command=main_logic_xp, bg='LIGHTGRAY')
+b_xpg = tkinter.Button(root,  text='Extract >> ALL << tar.gz', command=main_logic_xpg, bg='LIGHTGRAY')
 separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
 separator.pack(fill=X, padx=5, pady=5)
 ttk.Label(root, text='Search Utilities').pack()
@@ -318,4 +377,5 @@ separator.pack(fill=X, padx=5, pady=5)
 ttk.Label(root, text='Extract Utilities').pack()
 ttk.Separator(root,orient=HORIZONTAL).pack(fill=X)
 b_xp.pack(fill='x')
+b_xpg.pack(fill = X)
 root.mainloop()
