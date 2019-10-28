@@ -47,8 +47,8 @@ Once the ViewPad presents the open file, there are two buttons at the bottom:
 <li>Accept search term</li>
 <li>Search</li>
 </ul>
-<p>Choose "Accept search term" button to use the search string populated in the text box. </p>
+``` Choose "Accept search term" button to use the search string populated in the text box. ```
 If you wish to use a different string, returning back to the search report, click anywhere on the report to break the ViewPad focus. Now return to the ViewPad and enter whatever you want in the text box to search on. When satisfied, click on the button >> "Accept search term". The report will jump to the first occurrence of the search string inside the text box.
 <p></p>
-<p>Click "Search" button to precede with the remaining search.</p> 
+```   Click "Search" button to precede with the remaining search.   ```
 The report will start over after you have reached the last occurrence.
