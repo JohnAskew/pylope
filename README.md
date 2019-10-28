@@ -1,4 +1,4 @@
-# pylope
+# pylope (Documentation in progress)
 Python log opener, parse and extract search strings
 
 # usage: 
