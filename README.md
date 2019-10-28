@@ -13,7 +13,7 @@ Secondary purpose will open tar and gzipped (gz) files. Simply clicking the "Byp
 
 ## Start Here to search files for a string.
 (Assuming you have launched the application).
-1. Click the green button >> "*Click to ENTER a search string"
+1. Click the green button >> "Click to ENTER a search string"
 2. Enter your search string and click "OK". Note: This is a literal search. See line 3.
 3. Optionally, you can check the button >> "Any Case" to make the search case insensitive.
 4. At this point, 2 more buttons become green:
