@@ -5,11 +5,11 @@ Python log opener, parse and extract search strings
 python pylope.py
 
 # description: 
-Primary tool searches files for a search string. Can also search a tar.gz file, which first extracts it into its own directory and then searches the contents for the search string. If a match is found on the search string, then a report is presented showing the directory searched, which file contained the search string, and gives the line number within the member (file). Each entry on the "found search string" report is a link, which if right clicked, will open the file and allow you to search the file for every occurrance of the search string.
+Primary tool searches files for a search string. Can also search a tar.gz file for a search string, as it first extracts it into its own directory and then searches the contents for the search string. If a match is found on the search string, then a report is presented showing the directory searched, which file containing the search string, and the line number within the file. Each entry on the "found search string" report is a link, which if right clicked, will open the file and allow you to search the file for every occurrance of the search string. See below under section, "How to read the search string report" for additional details.
 
-Secondary purpose will open tar and gzipped (gz) files. Simply clicking the "ByPass Search" checkbox will enable the search functionality (making 2 search buttons turn green and are enabled), but will only extract the tar or gz file and list the contents. The purpose is simply to check the contents of a directory by filename, or the contents of a tar.gz file. A simple report is produced of any files found in that current working directory.
+Secondary purpose will open tar and gzipped (gz) files. Simply clicking the "Bypass Search" checkbox will enable the search functionality (making 2 search buttons turn green and become enabled), but will only extract the tar or gz file and list the contents. The purpose is simply to check the contents of a directory by filename, or the contents of a tar.gz file. A simple report is produced of any files found in that current working directory. It's generally for windows, when doing a tar -tvf is not intuitive to the casual window's user.
 
-Tertiary purpose will open all gz files in a directory, regardless of how many levels deep the subdirectories span.
+(Test phase only) Tertiary purpose will open all gz files in a directory, regardless of how many levels deep the subdirectories span.
 
 ## Start Here to search files for a string.
 (Assuming you have launched the application).
