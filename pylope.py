@@ -333,28 +333,24 @@ def main_logic_xpg():
 
         )
     directory = os.path.split(f)[0]
-    print("main_logic_xpg before call with directory:", directory, "file:", f)
+    
     try:
         os.chdir(directory)
-        process_tar_gz(f)
+        extract_gz(f)
     except:
         print("PYlope function: main_logic_xpg unable to change directory", directory)
-    print("main_logic_xpg using directory:", directory, "for Treewalk of main_logic_xp")
-    if os.path.exists(directory):
-        os.chdir(directory)
-        for dirName, subdirList, fileList in os.walk(directory):
+    
+    for dirName, subdirList, fileList in os.walk(os.getcwd()):
             #print('Found directory %s ' % dirName)
-            for fname in fileList:
-                if fname.endswith("gz"):
-                    print("xploding {} gz file: {}".format(dirName, fname))
-                    b_xpg.configure(bg='RED', fg='WHITE', text="exploding {} gz file: {}".format(dirName, fname), font='Arial 8 bold')
-                    curr_dir = os.getcwd()
-                    os.chdir(dirName)
-                    call = 0
-                    #DEBUG print("main_logic_xp calling process_tar_gz with call:", call)
-                    process_tar_gz(fname, call)
-
-                    os.chdir(curr_dir)
+        for fname in fileList:
+            if fname.endswith("gz"):
+                print("expanding {} gz file: {}".format(dirName, fname))
+                b_xpg.configure(bg='RED', fg='WHITE', text="exploding {} gz file: {}".format(dirName, fname), font='Arial 8 bold')
+                curr_dir = os.getcwd()
+                os.chdir(dirName)
+                call = 0
+                process_tar_gz(fname, call)
+                os.chdir(curr_dir)
     b_xpg.configure(text='Extract >> ALL << in tar.gz', bg='LIGHTGRAY', fg='BLACK', font='TkDefaultFont')
 
 #####################################
