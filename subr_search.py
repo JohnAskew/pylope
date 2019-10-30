@@ -38,6 +38,7 @@ str_any_case   = "( any case ) : "
 str_dir        = "Path : "
 str_details =  "*-------------------------------------------------- D E T A I L S ------------------------------------------------------"
 str_tot_search = None
+str_path = None
 
 #--------------------------------------#
 def onselect(evt):
@@ -55,9 +56,11 @@ def onselect(evt):
 #--------------------------------------#
 def openfile(event):
 #--------------------------------------#
-    #x = int(l.curselection()[0])
+    os.chdir(str_path)
     x = index_start
     label = l.get(x).split()[0]
+    label = str_path + "/" + label
+    print("subr_search.py: openfile: x=index_start:", x, "label=l.get(x).split()[0]", label)
 
     try:
         if len(str_tot_search) > 0:
@@ -175,7 +178,8 @@ if len(sys.argv) >= 2:
         l.insert(END, str_header_1)
         l.insert(END, dash_line)
         l.insert(END, astr_line)
-        str_dir = str_dir + os.getcwd()
+        str_path = os.getcwd()
+        str_dir = str_dir + str_path
         l.insert(END, str_dir)
         l.insert(END, astr_line)
         l.insert(END, str_search_cnt)
