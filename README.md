@@ -23,10 +23,10 @@ Secondary purpose will open tar and gzipped (gz) files. Simply clicking the "Cle
 </ul>
 
 ## To search all the files in one directory:
-Choose the "Open Directory to search" button and you will be guided to select your directory
+This option is when you have 1 or more log files within the same directory. Choose the "Open Directory to search" button and you will be guided to select your directory
 
 ## To search a tar.gz file:
-Choose the "Open & Extract tar.gz to search" button. It will unzip and untar the file into a new directory and then search that directory for the search string.
+This option is when you have directories containing more tar.gz files, you can pick a particular tar.gz file and PYLope will open it and search the contents. Choose the "Open & Extract tar.gz to search" button. It will unzip and untar the file into a new directory and then search that directory for the search string.
 
 ## How to read the search string report.
 (Providing the search string was found).
