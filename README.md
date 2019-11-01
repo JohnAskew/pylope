@@ -18,8 +18,8 @@ Secondary purpose will open tar and gzipped (gz) files. Simply clicking the "Cle
 3. Optionally, you can check the button >> "Any Case" to make the search case insensitive.
 4. At this point, 2 more buttons become green:
 <ul>
-<li>button >> "Open Directory to search"</li>
-<li>button >> "Open & Extract tar.gz to search"</li>
+<li>button >> "Open and search single directory containing logs"</li>
+<li>button >> "Open, extract and search single tar.gz"</li>
 <li>button >> "Recursively search a directory for a search string"</li>
 </ul>
 
