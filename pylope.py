@@ -35,17 +35,57 @@ except:
     os.system("pip install subprocess")
     import subprocess
 
-
+try:
+    from pylope_parameters import *
+except ModuleNotFoundError:
+    raise ModuleNotFoundError ('Missing pylope_parameters file. Unable to pass parameters between programs')
+finally:
+    print("pylope.py: after import, p:", p, "p_case:", p_case, "p_whole:", p_whole, "p_clear:", p_clear, "call:", call, "p_recur_search:", p_recur_search)
 #-----------------
 sysarg_len = 4 #Number of arguments I can pass
 #-----------------
 user = getpass.getuser()
 root = tkinter.Tk()
 dir_path = os.path.dirname(os.path.realpath(__file__))
-p = " " #Default placeholder = poor programmming, that's why
-p_case = 0 #Default placeholder - again, poor programming, that's why
-p_whole = 0 #Default placeholder
-p_clear = 0
+
+#======================================#
+class class_main_logic_for_file_and_dir:
+#======================================#
+#--------------------------------------#
+    def __init__(self):
+#--------------------------------------#
+        pass
+#--------------------------------------#
+    def get_file():
+#--------------------------------------#
+        f = tkinter.filedialog.askopenfilename(
+
+        parent=root, initialdir='C:\\Users\\%s\\Downloads' % user,
+
+        title='Choose file',
+
+        filetypes=[('tar zip', '.tar.gz .tgz'),
+                   ('tar', '.tar'),
+                   ('gunzip', '.gz'),
+                   ('7zip', '.7z')]
+
+        )
+        return f
+#--------------------------------------#
+    def get_directory():
+#--------------------------------------#
+        f = tk.filedialog.askdirectory(
+
+            parent=root, initialdir='C:\\Users\\%s\\Downloads' % user,
+
+            title='Choose directory'
+
+            )
+        return f
+#======================================#
+# End Class
+#======================================#
+
 #======================================#
 class MainWindow():
 #======================================#
@@ -68,11 +108,12 @@ class MainWindow():
         self.top.destroy()
         global p_clear
         p_clear = 0
-        b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
-        b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
         if len(p) > 0:
             x = "Searching >> " + p
             mf.mySubmitButton1.config(text = x)
+            b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
+            b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
+            b_rs.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
 
     #--------------------------------------#
     def set_callback(self, a_func):
@@ -86,7 +127,7 @@ class MyFrame(tk.Frame):
     def __init__(self, parent, **kwargs):
         super().__init__(parent, **kwargs)
         self.pack()
-        self.myLabel1 = tk.Label(parent, fg='DARKRED',bg='YELLOW', text='Python Log Open, Parse & Extract utility (PYlope)')
+        self.myLabel1 = tk.Label(parent, fg='DARKRED',bg='YELLOW', text='Python Log Toolkit: Open, Parse & Extract utility',font='Arial 10 bold')
         self.myLabel1.pack()
         self.mySubmitButton1 = tk.Button(parent, anchor=N, fg='BLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string', command=self.get_group_name)
         separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
@@ -99,6 +140,9 @@ class MyFrame(tk.Frame):
         self.c = Checkbutton(root, text="Any Case", variable=self.var_case, command=self.cb_case, activebackground = 'GREEN',state=DISABLED)
         self.c.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=10, height=-1)
         self.c.pack(side=TOP, padx=5, pady=5)
+        self.d = Checkbutton(root, text="Whole word", variable=self.var_whole, command=self.cb_whole, activebackground = 'GREEN',state=DISABLED)
+        self.d.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=10, height=-1)
+        self.d.pack(side=TOP, padx=5, pady=5)
         self.e = Checkbutton(root, text="Clear search; Just list contents", variable=self.var_clear, command=self.cb_clear, activebackground = 'GREEN')
         self.e.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=25, height=0)
         self.e.pack( padx=5, pady=5,side=TOP)
@@ -117,6 +161,7 @@ class MyFrame(tk.Frame):
 #--------------------------------------#
         global p_whole
         p_whole = self.var_whole.get()
+        print("cb_whole: type", type(p_whole), "p_whole:", p_whole)
 
 #--------------------------------------#
     def cb_clear(self):
@@ -128,6 +173,7 @@ class MyFrame(tk.Frame):
             p_case = 0
             b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
             b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE')
+            b_rs.config(state=DISABLED)
             mf.mySubmitButton1.config(fg='BLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string')
 
         if  (p == None or p == " ") and p_clear == 0:
@@ -142,6 +188,7 @@ class MyFrame(tk.Frame):
         # provide callback to MainWindow so that it can return results to MyFrame
         mw.set_callback(self.set_label)
         self.c.config(state=NORMAL)
+        self.d.config(state=NORMAL)
 
 
 #--------------------------------------#
@@ -156,7 +203,7 @@ class MyFrame(tk.Frame):
 #--------------------------------------#
 def call_subr_search():
 #--------------------------------------#
-    subprocess.call(["python", dir_path + "/" + "subr_call_search.py",  p, str(p_case), str(p_whole), str(p_clear) ])
+    subprocess.call(["python", dir_path + "/" + "subr_call_search.py",  p, str(p_case), str(p_whole), str(p_clear), str(call), str(p_recur_search) ])
 
 #--------------------------------------#
 def process_tar_gz(f, call=1):
@@ -176,38 +223,33 @@ def process_tar_gz(f, call=1):
 def extract_gz(file, call = 1):
 #--------------------------------------#
     dir = os.path.dirname(file) # get directory where file is stored
-    #os.chdir(dir)
     filename = os.path.basename(file) # get filename
     
     file_tar, file_tar_ext = os.path.splitext(file) # split into file.tar and .gz
     
     file_untar, file_untar_ext = os.path.splitext(file_tar) #split into file and .tar
     
-    #os.chdir(dir)
-
     if file_tar_ext == ".gz" and file_untar_ext == ".tar":
         if not os.path.exists(file_untar):
             os.mkdir(file_untar) 
 
-        tar = tarfile.open(filename)
+        tar = tarfile.open(filename, encoding='utf-8')
 
         for i in tar.getmembers():
             try:
                 tar.extract(i, path=file_untar)
-
             except:
-                print("Unable to extract:", i ,"to:", file_untar, "The current directory is:", os.getcwd())
+                print("Unable to extract:", i ,"to:", file_untar)
         tar.close()
      
         os.chdir(file_untar)
+
         if call:
             call_subr_search()
-        #DEBUG else:
-            #DEBUG print("extract_gz bypassing call_subr_search with call", call)
+
 #--------------------------------------#
 def extract_tgz(f, call =  1):
 #--------------------------------------#
-    #DEBUG print("entering extract_tgz with call:", call)
     tar = gzip.open(f, 'rb')
     tar = tarfile.open(f, "r:gz")
     tar.extractall()
@@ -220,13 +262,10 @@ def extract_tgz(f, call =  1):
                 cnt +=1
                 if call:
                     call_subr_search()
-                #DEBUG else:
-                    #DEBUG print("extract_tgz bypassing call_subr_search with call:", call)
     tar.close()
 #--------------------------------------#
 def extract_tar(file, call = 1):
 #--------------------------------------#
-    #DEBUG print("entering extract_tar with call:", call)
     dir = os.path.dirname(file) # get directory where file is stored
     filename = os.path.basename(file) # get filename
     file_base, file_suffix = filename.split('.')
@@ -252,52 +291,40 @@ def extract_tar(file, call = 1):
 #--------------------------------------#
 def main_logic_tar_gz():
 #--------------------------------------#
-    f = tkinter.filedialog.askopenfilename(
-
-        parent=root, initialdir='C:\\Users\\%s\\Downloads' % user,
-
-        title='Choose file',
-
-        filetypes=[('tar zip', '.tar.gz .tgz'),
-                   ('tar', '.tar'),
-                   ('gunzip', '.gz'),
-                   ('7zip', '.7z')]
-
-        )
+    b_gz.config(state=NORMAL, bg='RED', fg='WHITE', text = 'Currently Extracting a single tar.gz',font='Arial 8 bold')
+    b_dir.config(state=DISABLED)
+    b_xp.config(state=DISABLED)
+    b_xpg.config(state=DISABLED)
+    b_rs.config(state=DISABLED)
+    f = class_main_logic_for_file_and_dir.get_file()
     directory = os.path.split(f)[0]
-
     try:
         os.chdir(directory)
         process_tar_gz(f)
     except:
         print("PYlope function: main_logic_tar_gz unable to change directory", directory)
-    
+    b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE', text='Open, extract and search single tar.gz', font='TkDefaultFont')
+    b_dir.config(state=NORMAL)
+    b_xp.config(state=NORMAL)
+    b_xpg.config(state=NORMAL)
+    b_rs.config(state=NORMAL)
 #--------------------------------------#
 def main_logic_directory():
 #--------------------------------------#
-
-    f = tkinter.filedialog.askdirectory(
-
-        parent=root, initialdir='C:\\Users\\%s\\Downloads' % user,
-
-        title='Choose directory'
-
-        )
+    b_dir.config(state=NORMAL, bg='RED', fg='WHITE', text='Currently searching directory ', font='Arial 8 bold', highlightcolor='ORANGE')
+    f = class_main_logic_for_file_and_dir.get_directory()
+ 
     if os.path.exists(f):
         os.chdir(f)
         call_subr_search()
+    b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='BLUE', text='Open and search single directory containing logs', font='TkDefaultFont')
 
 #--------------------------------------#
 def main_logic_xp():
 #--------------------------------------#
     b_xp.configure(bg='RED', fg='WHITE', text='Currently Extracting >> ALL << gz', font='Arial 8 bold')
-    f = tkinter.filedialog.askdirectory(
 
-        parent=root, initialdir='C:\\Users\\%s\\Downloads' % user,
-
-        title='Choose directory'
-
-        )
+    f = class_main_logic_for_file_and_dir.get_directory()
     if os.path.exists(f):
         os.chdir(f)
         for dirName, subdirList, fileList in os.walk(f):
@@ -309,7 +336,6 @@ def main_logic_xp():
                     curr_dir = os.getcwd()
                     os.chdir(dirName)
                     call = 0
-                    #DEBUG print("main_logic_xp calling process_tar_gz with call:", call)
                     process_tar_gz(fname, call)
 
                     os.chdir(curr_dir)
@@ -319,19 +345,8 @@ def main_logic_xp():
 def main_logic_xpg():
 #--------------------------------------#
     b_xpg.configure(bg='RED', fg='WHITE', text='Currently Extracting >> ALL << in tar.gz', font='Arial 8 bold')
-
-    f = tkinter.filedialog.askopenfilename(
-
-        parent=root, initialdir='C:\\Users\\%s\\Downloads' % user,
-
-        title='Choose file',
-
-        filetypes=[('tar zip', '.tar.gz .tgz'),
-                   ('tar', '.tar'),
-                   ('gunzip', '.gz'),
-                   ('7zip', '.7z')]
-
-        )
+    f = class_main_logic_for_file_and_dir.get_file()
+    
     directory = os.path.split(f)[0]
     
     try:
@@ -353,24 +368,39 @@ def main_logic_xpg():
                 os.chdir(curr_dir)
     b_xpg.configure(text='Extract >> ALL << in tar.gz', bg='LIGHTGRAY', fg='BLACK', font='TkDefaultFont')
 
+#--------------------------------------#
+def main_logic_recur_search():
+#--------------------------------------#
+    b_rs.configure(bg='RED', fg='WHITE', text='Recursively searching directories for search string', font='Arial 8 bold')
+    directory = class_main_logic_for_file_and_dir.get_directory()
+    if os.path.exists(directory):
+        try:
+            os.chdir(directory)
+        except:
+            print("PYLope error in main_logic_recur_search. Unable to change to directory:", directory)
+
+    b_rs.config(bg='LIGHTGREEN', fg='BLUE', text = 'Recursively search a directory for a search string', font='TkDefaultFont')
+
 #####################################
 # M A I N   L O G I C
 #####################################
 
 mf = MyFrame(root)
-b_dir = tkinter.Button(root, state=DISABLED, text='Open Directory to search', command=main_logic_directory)
-b_gz = tkinter.Button(root, state=DISABLED, text='Open & Extract tar.gz to search', command=main_logic_tar_gz)
-b_xp = tkinter.Button(root,  text='Extract >> ALL << gz in Directory', command=main_logic_xp, bg='LIGHTGRAY')
-b_xpg = tkinter.Button(root,  text='Extract >> ALL << tar.gz', command=main_logic_xpg, bg='LIGHTGRAY')
+b_dir = tkinter.Button(root,state=DISABLED, text='Open and search single directory containing logs', command=main_logic_directory)
+b_gz = tkinter.Button(root, state=DISABLED, text='Open, extract and search single tar.gz', command=main_logic_tar_gz)
+b_rs = tkinter.Button(root, state=DISABLED, text = 'Recursively search a directory for a search string', command=main_logic_recur_search)
+b_xp = tkinter.Button(root, text='Recursively extract >> ALL << within a Directory', command=main_logic_xp, bg='LIGHTGRAY')
+b_xpg = tkinter.Button(root, text='Recursively extract all tar.gz children within a tar.gz file', command=main_logic_xpg, bg='LIGHTGRAY')
 separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
 separator.pack(fill=X, padx=5, pady=5)
-ttk.Label(root, text='Search Utilities').pack()
+ttk.Label(root, text='Search Utilities for Singleton Directory or GZIP File ',font='Arial 8 bold', background='YELLOW', foreground='DARKRED').pack()
 ttk.Separator(root,orient=HORIZONTAL).pack(fill=X)
 b_dir.pack(fill='x')
 b_gz.pack(fill='x')
+b_rs.pack(fill=X)
 separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
 separator.pack(fill=X, padx=5, pady=5)
-ttk.Label(root, text='Extract Utilities').pack()
+ttk.Label(root, text='Heavy Lifting Extract Utilities (Click and go for coffee)',font='Arial 8 bold', background='DARKRED', foreground='BEIGE').pack()
 ttk.Separator(root,orient=HORIZONTAL).pack(fill=X)
 b_xp.pack(fill='x')
 b_xpg.pack(fill = X)

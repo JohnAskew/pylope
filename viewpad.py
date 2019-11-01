@@ -382,7 +382,7 @@ if search_term:
     edit.delete(0, END)
     edit.insert(0, search_term)
 edit.pack(side=LEFT, fill=BOTH, expand=1)
-#edit.focus_set()
+
 
 butt_search = Button(fram, text='Search')
 butt_search.pack(side=RIGHT)
@@ -399,5 +399,5 @@ if len(sys.argv) > 1:
     __file = file_2_open
     viewpad._Viewpad__openFile()
     butt.focus_force()
-#redraw(viewpad._Viewpad__root)     
+    
 viewpad.run()

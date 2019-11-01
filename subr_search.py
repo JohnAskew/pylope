@@ -17,9 +17,12 @@ try:
 except:
     os.system('pip install webbrowser')
     import webbrowser
+try:
+    from pylope_parameters import *
+except ModuleNotFoundError:
+    raise ModuleNotFoundError ('Missing pylope_parameters file. Unable to pass parameters between programs')
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sysarg_len = 5 #Maximum number of arguments passed from main program
 index = 0
 #dir_path = os.getcwd()
 str1 = "***********************************************************"
@@ -40,6 +43,7 @@ str_details =  "*-------------------------------------------------- D E T A I L 
 str_tot_search = None
 str_path = None
 
+
 #--------------------------------------#
 def onselect(evt):
 #--------------------------------------#
@@ -56,12 +60,13 @@ def onselect(evt):
 #--------------------------------------#
 def openfile(event):
 #--------------------------------------#
-    os.chdir(str_path)
+    if str_path != None:
+        if os.path.isdir(str_path):
+            os.chdir(str_path)
     x = index_start
     label = l.get(x).split()[0]
-    label = str_path + "/" + label
-    print("subr_search.py: openfile: x=index_start:", x, "label=l.get(x).split()[0]", label)
-
+    #label = str_path + "/" + label
+    
     try:
         if len(str_tot_search) > 0:
             subprocess.Popen(["python", dir_path + "/" + "viewpad.py",  label , str_tot_search])
@@ -113,7 +118,7 @@ def get_filenames():
             search_cnt = 0
             for i in os.listdir('.'):
                 try:
-                    with open(i, encoding="utf8") as x:
+                    with open(i, encoding="utf-8") as x:
                         line = x.readline()
                         cnt = 1
                         while line:
@@ -142,10 +147,11 @@ def get_filenames():
 # M A I N   L O G I C
 ########################################
 root = Tk()
+folderPath = StringVar()
 if len(sys.argv) >= 2:
     if sys.argv[1] != " ":
         l = Listbox(root, height=25, width=120, bg='YELLOW', fg='BLUE', selectmode='multiple')
-        l.master.title(">>> PYlope search results <<<")
+        l.master.title(">>> PYLope search results <<<")
         l.grid(column=0, row=0, sticky=(N,E,W,S))
         r = ttk.Scrollbar(root, orient=HORIZONTAL, command=l.xview)
         r.grid(column=0, row=1, sticky=(E,W))
@@ -196,6 +202,7 @@ if len(sys.argv) >= 2:
             l.insert(END, spacer_line)
             #l.config(foreground = 'RED', background = 'YELLOW')
             for filename in getfilenames:
+                filename = str_path + "/" + filename
                 l.insert(END, filename)
                 l.insert(END, spacer_line)
 else:
