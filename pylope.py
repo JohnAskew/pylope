@@ -338,7 +338,7 @@ def main_logic_xp():
                     process_tar_gz(fname, call)
 
                     os.chdir(curr_dir)
-    b_xp.configure(text='Extract >> ALL << gz in Directory', bg='LIGHTGRAY', fg='BLACK', font='TkDefaultFont')
+    b_xp.configure(text='Extract >> ALL << gz in Directory', font='TkDefaultFont', bg='LIGHTGREEN', fg='DARKRED')
 
 #--------------------------------------#
 def main_logic_xpg():
@@ -365,7 +365,7 @@ def main_logic_xpg():
                 call = 0
                 process_tar_gz(fname, call)
                 os.chdir(curr_dir)
-    b_xpg.configure(text='Extract >> ALL << in tar.gz', bg='LIGHTGRAY', fg='BLACK', font='TkDefaultFont')
+    b_xpg.configure(text='Extract >> ALL << in tar.gz', font='TkDefaultFont', bg='LIGHTGREEN', fg='DARKRED')
 
 #--------------------------------------#
 def main_logic_recur_search():
@@ -388,8 +388,8 @@ mf = MyFrame(root)
 b_dir = tkinter.Button(root,state=DISABLED, text='Open and search single directory containing logs', command=main_logic_directory)
 b_gz = tkinter.Button(root, state=DISABLED, text='Open, extract and search single tar.gz', command=main_logic_tar_gz)
 b_rs = tkinter.Button(root, state=DISABLED, text = 'Recursively search a directory for a search string', command=main_logic_recur_search)
-b_xp = tkinter.Button(root, text='Recursively extract >> ALL << within a Directory', command=main_logic_xp, bg='LIGHTGRAY')
-b_xpg = tkinter.Button(root, text='Recursively extract all tar.gz children within a tar.gz file', command=main_logic_xpg, bg='LIGHTGRAY')
+b_xp = tkinter.Button(root, text='Recursively extract >> ALL << within a Directory', command=main_logic_xp, bg='LIGHTGREEN', fg='DARKRED')
+b_xpg = tkinter.Button(root, text='Recursively extract all tar.gz children within a tar.gz file', command=main_logic_xpg, bg='LIGHTGREEN', fg='DARKRED')
 separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
 separator.pack(fill=X, padx=5, pady=5)
 ttk.Label(root, text='Search Utilities for Singleton Directory or GZIP File ',font='Arial 8 bold', background='YELLOW', foreground='DARKRED').pack()
@@ -399,7 +399,7 @@ b_gz.pack(fill='x')
 
 separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
 separator.pack(fill=X, padx=5, pady=5)
-ttk.Label(root, text='Heavy Lifting Extract Utilities (Click and go for coffee)',font='Arial 8 bold', background='DARKRED', foreground='BEIGE').pack()
+ttk.Label(root, text='Heavy Lifting Utilities (Click and go for coffee)',font='Arial 8 bold', background='DARKRED', foreground='BEIGE').pack()
 ttk.Separator(root,orient=HORIZONTAL).pack(fill=X)
 b_rs.pack(fill=X)
 b_xp.pack(fill='x')
