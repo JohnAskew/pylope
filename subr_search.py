@@ -112,8 +112,7 @@ def get_filenames():
     if (len(sys.argv) < 2):
         return os.listdir('.')
     else:
-        if sys.argv[1] != " ":
-            myString = sys.argv[1]
+        if p != " ":
             stringList = []
             search_cnt = 0
             for i in os.listdir('.'):
@@ -123,12 +122,12 @@ def get_filenames():
                         cnt = 1
                         while line:
                             if (len(sys.argv) > 2):
-                                if (sys.argv[2] == '1'):
-                                    z = line.lower().find(myString.lower())
+                                if p_case == '1':
+                                    z = line.lower().find(p.lower())
                                 else:
-                                    z = line.find(myString)
+                                    z = line.find(p)
                             else:
-                                z = line.find(myString)
+                                z = line.find(p)
                             if z > -1:
                                 search_cnt += 1
                                 #DEBUG print("search_cnt:", search_cnt, "File {} : Line {} : offset {}: {}".format(i, cnt, z, line.strip()))
@@ -149,7 +148,7 @@ def get_filenames():
 root = Tk()
 folderPath = StringVar()
 if len(sys.argv) >= 2:
-    if sys.argv[1] != " ":
+    if p != " ":
         l = Listbox(root, height=25, width=120, bg='YELLOW', fg='BLUE', selectmode='multiple')
         l.master.title(">>> PYLope search results <<<")
         l.grid(column=0, row=0, sticky=(N,E,W,S))
@@ -169,9 +168,9 @@ if len(sys.argv) >= 2:
         str_header_1 = str_header_1 + now
         str_search_cnt = str(str_search_cnt)
         search_cnt = str(search_cnt)
-        str_tot_search = str(sys.argv[1])
+        str_tot_search = str(p)
         if (len(sys.argv) > 2):
-            if sys.argv[2] == '1':
+            if p_case == '1':
                 str_search_cnt = str_tot_1 + str_tot_search + str_tot_2b + str_any_case + search_cnt
         else:
             str_search_cnt = str_tot_1 + str_tot_search + str_tot_2 + search_cnt

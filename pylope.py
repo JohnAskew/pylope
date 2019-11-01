@@ -39,8 +39,7 @@ try:
     from pylope_parameters import *
 except ModuleNotFoundError:
     raise ModuleNotFoundError ('Missing pylope_parameters file. Unable to pass parameters between programs')
-finally:
-    print("pylope.py: after import, p:", p, "p_case:", p_case, "p_whole:", p_whole, "p_clear:", p_clear, "call:", call, "p_recur_search:", p_recur_search)
+
 #-----------------
 sysarg_len = 4 #Number of arguments I can pass
 #-----------------
@@ -397,11 +396,12 @@ ttk.Label(root, text='Search Utilities for Singleton Directory or GZIP File ',fo
 ttk.Separator(root,orient=HORIZONTAL).pack(fill=X)
 b_dir.pack(fill='x')
 b_gz.pack(fill='x')
-b_rs.pack(fill=X)
+
 separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
 separator.pack(fill=X, padx=5, pady=5)
 ttk.Label(root, text='Heavy Lifting Extract Utilities (Click and go for coffee)',font='Arial 8 bold', background='DARKRED', foreground='BEIGE').pack()
 ttk.Separator(root,orient=HORIZONTAL).pack(fill=X)
+b_rs.pack(fill=X)
 b_xp.pack(fill='x')
 b_xpg.pack(fill = X)
 root.mainloop()
