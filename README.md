@@ -20,6 +20,7 @@ Secondary purpose will open tar and gzipped (gz) files. Simply clicking the "Cle
 <ul>
 <li>button >> "Open Directory to search"</li>
 <li>button >> "Open & Extract tar.gz to search"</li>
+<li>button >> "Recursively search a directory for a search string"</li>
 </ul>
 
 ## To search all the files in one directory:
