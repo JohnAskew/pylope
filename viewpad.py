@@ -3,14 +3,19 @@ import os
 from tkinter import *
 from tkinter.messagebox import *
 from tkinter.filedialog import *
+try:
+    from pylope_parameters import *
+except ModuleNotFoundError:
+    raise ModuleNotFoundError ('Missing pylope_parameters file. Unable to pass parameters between programs')
 
 
-if len(sys.argv) > 1:
-    file_2_open = sys.argv[1]
+# if len(sys.argv) > 1:
+#     file_2_open = sys.argv[1]
+if p_file:
+    file_2_open = p_file
 else:
     file_2_open = None
 
-search_term = None
 idx_table = []
 curr_ptr = 0.0
 curr_search  = ""
@@ -319,43 +324,6 @@ def search():
                     viewpad._Viewpad__thisTextArea.tag_config('highlight', foreground='yellow', background='red')
                     break
 
-#-------------------------------------#
-def redraw(self, *args):
-#-------------------------------------#
-    '''redraw line numbers'''
-    #self.delete("all")
-
-    # Build dict to convert line index to line number
-    linenums = {}
-    num = 1
-    contents = viewpad._Viewpad__thisTextArea.get("1.0", END)
-
-    for i, line in enumerate(contents.splitlines(), 1):
-        i = str(i) + '.0'
-        linetext = viewpad._Viewpad__thisTextArea.get(i, "%s+1line" % i)
-        print("redraw: linetext:", linetext)
-        #if linetext.strip():
-        linenums[i] = str(num)
-        #print(num, linetext,)
-        num += 1
-
-
-    i = viewpad._Viewpad__thisTextArea.index("@0,0")
-    lnbar = Frame(viewpad._Viewpad__root,  width=15)
-    for linenum in linenums:
-        if linenum is not None:
-            print("linenum:", linenum)
-            linelabel= Label(lnbar, text=linenum)
-            #linelabel.pack(side=LEFT)
-            lnbar.grid(padx=1, pady=1, sticky='W')
-            
-            #viewpad._Viewpad__thisTextArea.text(2,y,anchor="nw", text=linenum)
-
-            # viewpad._Viewpad__thisTextArea.canvas = Canvas(viewpad._Viewpad__root, width=10, height=65, bg = '#afeeee')
-            # viewpad._Viewpad__thisTextArea.canvas.create_text(2,y,anchor="nw", text=linenum)
-            
-
-            i = viewpad._Viewpad__thisTextArea.index("%s+1line" % i)
 
 
 ########################################
@@ -365,12 +333,6 @@ def redraw(self, *args):
 #--------------------------------------#
 # HOUSEKEEPING
 #--------------------------------------#
-if len(sys.argv) > 2:
-    search_term = sys.argv[2]
-
-#--------------------------------------#
-# Run main application
-#--------------------------------------# 
 viewpad = Viewpad(width=600,height=400)
 
 idx_table = []
@@ -378,9 +340,9 @@ idx_len = 0
 fram = Frame(viewpad._Viewpad__root)
 Label(fram,text='Text to find:').pack(side=LEFT)
 edit = Entry(fram)
-if search_term:
+if p:
     edit.delete(0, END)
-    edit.insert(0, search_term)
+    edit.insert(0, p)
 edit.pack(side=LEFT, fill=BOTH, expand=1)
 
 
@@ -393,9 +355,12 @@ butt.config(command=find)
 butt_search.config(command=search)
 
 fram.grid(sticky=NW,padx=0,pady=0)
+#--------------------------------------#
+# Run main application
+#--------------------------------------# 
 
-if len(sys.argv) > 1:
-    file_2_open = sys.argv[1]
+if p_file:
+    file_2_open = p_file
     __file = file_2_open
     viewpad._Viewpad__openFile()
     butt.focus_force()

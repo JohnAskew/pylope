@@ -202,7 +202,7 @@ class MyFrame(tk.Frame):
 #--------------------------------------#
 def call_subr_search():
 #--------------------------------------#
-    subprocess.call(["python", dir_path + "/" + "subr_call_search.py",  p, str(p_case), str(p_whole), str(p_clear), str(call), str(p_recur_search) ])
+    subprocess.call(["python", dir_path + "/" + "subr_call_search.py",  p, str(p_case), str(p_whole), str(p_clear), str(call), str(p_recur_search) , str(p_file)])
 
 #--------------------------------------#
 def process_tar_gz(f, call=1):

@@ -12,7 +12,7 @@ except ModuleNotFoundError:
     raise ModuleNotFoundError ('Missing pylope_parameters file. Unable to pass parameters between programs')
 
 #--------------------------------------#
-def call_subr_search(p, p_case, p_whole, p_clear, call, p_recur_search):
+def call_subr_search(p, p_case, p_whole, p_clear, call, p_recur_search, p_file):
 #--------------------------------------#
      
     if p_clear == '1':
@@ -31,4 +31,4 @@ def call_subr_search(p, p_case, p_whole, p_clear, call, p_recur_search):
 # M A I N   L O G I C
 #####################################
 dir_path = os.path.dirname(os.path.realpath(__file__))
-call_subr_search(p, p_case, p_whole, p_clear, call, p_recur_search)
+call_subr_search(p, p_case, p_whole, p_clear, call, p_recur_search, p_file)
