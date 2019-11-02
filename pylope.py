@@ -385,6 +385,7 @@ def main_logic_recur_search():
 #####################################
 
 mf = MyFrame(root)
+root.wm_iconbitmap("./py.ico") 
 b_dir = tkinter.Button(root,state=DISABLED, text='Open and search single directory containing logs', command=main_logic_directory)
 b_gz = tkinter.Button(root, state=DISABLED, text='Open, extract and search single tar.gz', command=main_logic_tar_gz)
 b_rs = tkinter.Button(root, state=DISABLED, text = 'Recursively search a directory for a search string', command=main_logic_recur_search)
