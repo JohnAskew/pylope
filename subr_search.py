@@ -149,7 +149,7 @@ global str_path
 str_path = None
 if p != " ":
     l = Listbox(root, height=25, width=120, bg='YELLOW', fg='BLUE', selectmode='multiple')
-    root.wm_iconbitmap("./py.ico") 
+    root.wm_iconbitmap(dir_path + "/" + "./py.ico") 
     l.master.title(">>> PYLope search results <<<")
     l.grid(column=0, row=0, sticky=(N,E,W,S))
     r = ttk.Scrollbar(root, orient=HORIZONTAL, command=l.xview)
