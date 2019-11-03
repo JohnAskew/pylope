@@ -148,7 +148,8 @@ root = Tk()
 global str_path
 str_path = None
 if p != " ":
-    l = Listbox(root, height=25, width=120, bg='YELLOW', fg='BLUE', selectmode='multiple')
+    getfilenames, search_cnt = get_filenames()
+    l = Listbox(root, height=25, width=150, bg='YELLOW', fg='BLUE', selectmode='multiple')
     root.wm_iconbitmap(dir_path + "/" + "./py.ico") 
     l.master.title(">>> PYLope search results <<<")
     l.grid(column=0, row=0, sticky=(N,E,W,S))
@@ -161,7 +162,7 @@ if p != " ":
     ttk.Sizegrip().grid(column=1, row=1, sticky=(S,E))
     root.grid_columnconfigure(0, weight=1)
     root.grid_rowconfigure(0, weight=1)
-    getfilenames, search_cnt = get_filenames()
+
     now = datetime.now()
     now = str(now.strftime("%A %d. %B %Y %I:%M%p"))
     str_header_1 = str(str_header_1)

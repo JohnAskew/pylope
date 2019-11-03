@@ -28,8 +28,8 @@ class Viewpad:
 
     # default window width and height
     __thisLineWidth = 6 
-    __thisWidth = 600
-    __thisHeight = 300
+    __thisWidth = 1200
+    __thisHeight = 600
     __thisLineArea = Text(__root)
     __thisTextArea = Text(__root) 
     __thisMenuBar = Menu(__root) 
@@ -164,11 +164,13 @@ class Viewpad:
             self.__file = file_2_open
             askopenfilename(defaultextension=".txt", 
                             initialfile = file_2_open,
+
                             filetypes=[("All Files","*.*"),
                                        ("Logs", "*.log *.1 *.2 *.3 *.4 *.5 *.6 *.7 *.8 *.9"),
                                        ("Text Documents","*.txt")]) 
         else:
             self.__file = askopenfilename(defaultextension=".txt", 
+                                          initialdir=sys.path[0],
                                           filetypes=[("All Files","*.*"),
                                           ("Logs", "*.log *.1 *.2 *.3 *.4 *.5 *.6 *.7 *.8 *.9"),
                                            ("Text Documents","*.txt")]) 
@@ -333,7 +335,7 @@ def search():
 #--------------------------------------#
 # HOUSEKEEPING
 #--------------------------------------#
-viewpad = Viewpad(width=600,height=400)
+viewpad = Viewpad(width=1200,height=600)
 
 idx_table = []
 idx_len = 0
