@@ -129,7 +129,7 @@ class MyFrame(tk.Frame):
         self.pack()
         self.myLabel1 = tk.Label(parent, fg='DARKRED',bg='YELLOW', text='Python Log Spy Toolkit: Open, Extract & Search utility',font='Arial 12 bold')
         self.myLabel1.pack()
-        self.mySubmitButton1 = tk.Button(parent, anchor=N, fg='DARKBLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string', command=self.get_group_name)
+        self.mySubmitButton1 = tk.Button(parent, anchor=N, bd=5, fg='DARKBLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string', command=self.get_group_name ,font='TkDefaultFont 11 bold')
         separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
         separator.pack(fill=X, padx=5, pady=5)
         self.mySubmitButton1.pack()
@@ -138,10 +138,10 @@ class MyFrame(tk.Frame):
         self.var_clear = IntVar()
         global c
         self.c = Checkbutton(root, text="Any Case", variable=self.var_case, command=self.cb_case, activebackground = 'GREEN',state=DISABLED)
-        self.c.config(relief=GROOVE, bd=5, bg='LIGHTGRAY', fg='BLACK', selectcolor='WHITE', width=10, height=-1)
+        self.c.config(relief=GROOVE, bd=5, bg='LIGHTGRAY', fg='DARKBLUE', selectcolor='WHITE', width=10, height=-1)
         self.c.pack(side=TOP, padx=5, pady=5)
         self.d = Checkbutton(root, text="Whole word", variable=self.var_whole, command=self.cb_whole, activebackground = 'GREEN',state=DISABLED)
-        self.d.config(relief=GROOVE, bd=5, bg='LIGHTGRAY', fg='BLACK', selectcolor='WHITE', width=10, height=-1)
+        self.d.config(relief=GROOVE, bd=5, bg='LIGHTGRAY', fg='DARKBLUE', selectcolor='WHITE', width=10, height=-1)
         self.d.pack(side=TOP, padx=5, pady=5)
         self.e = Checkbutton(root, text="Clear search; Just list contents", variable=self.var_clear, command=self.cb_clear, activebackground = 'GREEN')
         self.e.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=25, height=0)
@@ -171,8 +171,8 @@ class MyFrame(tk.Frame):
             p = " "
             p_case = 0
             b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
-            b_dir.config(state=DISABLED, bg='LIGHTGRAY', fg='BLACK')
-            b_rs.config(state=DISABLED, bg='LIGHTGRAY', fg='BLACK')
+            b_dir.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
+            b_rs.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
             mf.mySubmitButton1.config(fg='DARKBLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string')
             self.c.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
             self.d.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
@@ -303,7 +303,7 @@ def main_logic_tar_gz():
         process_tar_gz(f)
     except:
         print("PYlope function: main_logic_tar_gz unable to change directory", directory)
-    b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE', text='Open, extract and search single tar.gz', font='TkDefaultFont')
+    b_gz.config(state=NORMAL, bg='DARKGREEN', fg='DARKBLUE', text='Open, extract and search single tar.gz', font='TkDefaultFont')
     b_dir.config(state=NORMAL)
     b_xp.config(state=NORMAL)
     b_xpg.config(state=NORMAL)
@@ -317,7 +317,7 @@ def main_logic_directory():
     if os.path.exists(f):
         os.chdir(f)
         call_subr_search()
-    b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE', text='Open and search single directory containing logs', font='TkDefaultFont')
+    b_dir.config(state=NORMAL, bg='DARKGREEN', fg='DARKBLUE', text='Open and search single directory containing logs', font='TkDefaultFont')
 
 #--------------------------------------#
 def main_logic_xp():
@@ -339,7 +339,7 @@ def main_logic_xp():
                     process_tar_gz(fname, call)
 
                     os.chdir(curr_dir)
-    b_xp.configure(text='Extract >> ALL << gz in Directory', font='TkDefaultFont', bg='LIGHTGREEN', fg='DARKRED')
+    b_xp.configure(text='Extract >> ALL << gz in Directory', font='TkDefaultFont', bg='DARKGREEN', fg='DARKRED')
 
 #--------------------------------------#
 def main_logic_xpg():
@@ -366,7 +366,7 @@ def main_logic_xpg():
                 call = 0
                 process_tar_gz(fname, call)
                 os.chdir(curr_dir)
-    b_xpg.configure(text='Extract >> ALL << in tar.gz', font='TkDefaultFont', bg='LIGHTGREEN', fg='DARKRED')
+    b_xpg.configure(text='Extract >> ALL << in tar.gz', font='TkDefaultFont', bg='DARKGREEN', fg='DARKRED')
 
 #--------------------------------------#
 def main_logic_recur_search():
@@ -379,7 +379,7 @@ def main_logic_recur_search():
         except:
             print("PYLope error in main_logic_recur_search. Unable to change to directory:", directory)
 
-    b_rs.config(bg='LIGHTGREEN', fg='DARKBLUE', text = 'Recursively search a directory for a search string', font='TkDefaultFont')
+    b_rs.config(bg='DARKGREEN', fg='DARKBLUE', text = 'Recursively search a directory for a search string', font='TkDefaultFont')
 
 #####################################
 # M A I N   L O G I C
@@ -387,36 +387,48 @@ def main_logic_recur_search():
 
 mf = MyFrame(root)
 root.wm_iconbitmap("./py.ico") 
+
 b_dir = tkinter.Button(root,state=DISABLED, text='Open and search single directory containing logs', command=main_logic_directory)
 b_gz = tkinter.Button(root, state=DISABLED, text='Open, extract and search single tar.gz', command=main_logic_tar_gz)
 b_rs = tkinter.Button(root, state=DISABLED, text = 'Recursively search a directory for a search string', command=main_logic_recur_search)
-b_xp = tkinter.Button(root, text='Recursively extract >> ALL << within a Directory', command=main_logic_xp, bg='LIGHTGREEN', fg='DARKRED')
-b_xpg = tkinter.Button(root, text='Recursively extract all tar.gz children within a tar.gz file', command=main_logic_xpg, bg='LIGHTGREEN', fg='DARKRED')
-separator = Frame(height=15, bd=15, bg='YELLOW',relief=RAISED)
+b_xp = tkinter.Button(root, text='Recursively extract >> ALL << within a Directory', command=main_logic_xp, bg='DARKGREEN', fg='WHITE')
+b_xpg = tkinter.Button(root, text='Recursively extract all tar.gz children within a tar.gz file', command=main_logic_xpg, bg='DARKGREEN', fg='WHITE')
+separator = Frame(height=15, bd=3, bg='DARKBLUE',relief=RAISED)
 separator.pack(fill=X)#, padx=5, pady=5)
 ttk.Label(root, text='Search Utilities for Singleton Directory or GZIP File ',font='Arial 12 bold', background='LIGHTYELLOW', foreground='DARKBLUE').pack()
 ttk.Separator(root,orient=HORIZONTAL).pack(fill=X)
-separator = Frame(height=15, bd=15, bg='YELLOW',relief=RAISED)
+separator = Frame(height=15, bd=3, bg='DARKBLUE',relief=RAISED)
 separator.pack(fill=X)#, padx=5, pady=5)
+look=PhotoImage(file = r"look.png").subsample(2,2) 
+ttk.Label(root, image=look).pack()
 b_dir.pack(fill='x')
 b_gz.pack(fill='x')
-# separator = Frame(height=5, bd=10, bg='WHITE',relief=RAISED)
-# separator.pack(fill=X, padx=5, pady=5)
-separator = Frame(height=15, bd=15, bg='YELLOW',relief=RAISED)
+
+separator = Frame(height=15, bd=3, bg='DARKBLUE',relief=RAISED)
 separator.pack(fill=X)
+
+
 ttk.Label(root, text='Recursive Searches for Multiple Directories and GZIP Files',font='Arial 12 bold',  background='LIGHTYELLOW',foreground='DARKBLUE').pack()
+
 ttk.Separator(root,orient=HORIZONTAL).pack(fill=X)
-separator = Frame(height=15, bd=15, bg='YELLOW',relief=RAISED)
+separator = Frame(height=15, bd=3, bg='DARKBLUE',relief=RAISED)
 separator.pack(fill=X)
+search=PhotoImage(file = r"search.png").subsample(1,1) 
+ttk.Label(root, image=search).pack()
+
 b_rs.pack(fill=X)
 
 
-separator = Frame(height=15, bd=15, bg='YELLOW',relief=RAISED)
+separator = Frame(height=15, bd=3, bg='DARKBLUE',relief=RAISED)
 separator.pack(fill=X)
-ttk.Label(root, text='Heavy Lifting Utilities (Click and go for coffee)',font='Arial 12 bold', background='LIGHTYELLOW', foreground='DARKBLUE').pack()
+
+ttk.Label(root, text='Heavy Lifting Utilities (Click and go for coffee)' ,font='Arial 12 bold' , background='LIGHTYELLOW', foreground='DARKBLUE').pack()
+
 ttk.Separator(root,orient=HORIZONTAL).pack(fill=X)
-separator = Frame(height=15, bd=15, bg='YELLOW',relief=RAISED)
+separator = Frame(height=15, bd=3, bg='DARKBLUE',relief=RAISED)
 separator.pack(fill=X)
+coffee=PhotoImage(file = r"coffee.png").subsample(1,1) 
+ttk.Label(root, image=coffee).pack()
 b_xp.pack(fill='x')
 b_xpg.pack(fill = X)
 root.mainloop()

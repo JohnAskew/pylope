@@ -366,5 +366,5 @@ if p_file:
     __file = file_2_open
     viewpad._Viewpad__openFile()
     butt.focus_force()
-    
+
 viewpad.run()
