@@ -1,3 +1,5 @@
+# name: subr_search.py
+# desc: Search and list findings, pass to viewpad.py
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
@@ -22,24 +24,7 @@ try:
 except ModuleNotFoundError:
     raise ModuleNotFoundError ('Missing pylope_parameters file. Unable to pass parameters between programs')
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-index = 0
-#dir_path = os.getcwd()
-str1 = "***********************************************************"
-str2 = "* NO Search string supplied"
-str3 = "* OR no Log file was supplied."
-str4 = "* Printing contents of current directory."
-spacer_line = " "
-astr_line = "*"
-dash_line =    "*----------------------------------------------------------------------------------------------------------------------"
-str_header_1 = "* PYLOPE Search Report                                                        as of:    "
-str_search_cnt = "Total of search items found "
-str_tot_1      = "Total search cnt for  ["
-str_tot_2      = "] : "
-str_tot_2b     = "] "
-str_any_case   = "( any case ) : "
-str_dir        = "Path : "
-str_details =  "*-------------------------------------------------- D E T A I L S ------------------------------------------------------"
+
 
 
 
@@ -140,15 +125,9 @@ def get_filenames():
                     
             return stringList, search_cnt
 
-
-########################################
-# M A I N   L O G I C
-########################################
-root = Tk()
-global str_path
-str_path = None
-if p != " ":
-    getfilenames, search_cnt = get_filenames()
+#----------------------------------------#
+def write_header(str_header_1,str_search_cnt, search_cnt, str_dir):
+#----------------------------------------#
     l = Listbox(root, height=25, width=150, bg='YELLOW', fg='BLUE', selectmode='multiple')
     root.wm_iconbitmap(dir_path + "/" + "./py.ico") 
     l.master.title(">>> PYLope search results <<<")
@@ -195,12 +174,19 @@ if p != " ":
         l.insert(END, dash_line)
         l.insert(END, spacer_line)
         #l.config(foreground = 'RED', background = 'YELLOW')
-
         for filename in getfilenames:
             filename = str_path + "/" + filename
             l.insert(END, filename)
             l.insert(END, spacer_line)
-else:
+    return l
+#----------------------------------------#
+def write_report_line():
+#----------------------------------------#
+    pass
+
+#----------------------------------------#
+def write_null_report():
+#----------------------------------------#
     l = Listbox(root, height=25, width=85, bg='WHITE', fg='RED')
     root.wm_iconbitmap("./py.ico") 
     l.grid(column=0, row=0, sticky=(N,E,W,S))
@@ -223,7 +209,36 @@ else:
              selectmode='multiple')
     for filename in get_filenames():
         l.insert(END, filename)
-
+    return l
+########################################
+# M A I N   L O G I C
+########################################
+dir_path = os.path.dirname(os.path.realpath(__file__))
+index = 0
+#dir_path = os.getcwd()
+str1 = "***********************************************************"
+str2 = "* NO Search string supplied"
+str3 = "* OR no Log file was supplied."
+str4 = "* Printing contents of current directory."
+spacer_line = " "
+astr_line = "*"
+dash_line =    "*----------------------------------------------------------------------------------------------------------------------"
+str_header_1 = "* PYLOPE Search Report                                                        as of:    "
+str_search_cnt = "Total of search items found "
+str_tot_1      = "Total search cnt for  ["
+str_tot_2      = "] : "
+str_tot_2b     = "] "
+str_any_case   = "( any case ) : "
+str_dir        = "Path : "
+str_details =  "*-------------------------------------------------- D E T A I L S ------------------------------------------------------"
+root = Tk()
+global str_path
+str_path = None
+if p != " ":
+    getfilenames, search_cnt = get_filenames()
+    l = write_header(str_header_1,str_search_cnt, search_cnt, str_dir)
+else:
+    l = write_null_report()
 
 l.bind('<<ListboxSelect>>', onselect)
 l.bind('<FocusOut>', lambda e: l.selection_clear(0, END))

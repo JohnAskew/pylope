@@ -47,6 +47,7 @@ user = getpass.getuser()
 root = tkinter.Tk()
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
+
 #======================================#
 class class_main_logic_for_file_and_dir:
 #======================================#
@@ -186,6 +187,7 @@ class MyFrame(tk.Frame):
             mf.mySubmitButton1.config(fg='DARKBLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string')
             self.c.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
             self.d.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
+
 
         if  (p == None or p == " " or p == '') and p_clear == 0:
             b_gz.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
@@ -398,8 +400,8 @@ def main_logic_recur_search():
 mf = MyFrame(root)
 
 
-b_dir = tkinter.Button(root,state=DISABLED, text='Open and search single directory containing logs', command=main_logic_directory, width=40)
-b_gz = tkinter.Button(root, state=DISABLED, text='Open, extract and search single tar.gz', command=main_logic_tar_gz, width=40)
+b_dir = tkinter.Button(root,state=DISABLED, text='Open and search SINGLE directory containing logs', command=main_logic_directory, width=40)
+b_gz = tkinter.Button(root, state=DISABLED, text='Open, extract and search a SINGLE tar.gz', command=main_logic_tar_gz, width=40)
 b_rs = tkinter.Button(root, state=DISABLED, text = 'Recursively search a directory for a search string', command=main_logic_recur_search, width=40)
 b_xp = tkinter.Button(root, text='Recursively extract >> ALL Tar.GZIP Files<< within a Directory', command=main_logic_xp, bg='DARKGREEN', fg='WHITE',width=47)
 b_xpg = tkinter.Button(root, text='Recursively extract ALL Tar.GZIP Children within a tar.gz file', command=main_logic_xpg, bg='DARKGREEN', fg='WHITE', width=47)
@@ -409,6 +411,7 @@ ttk.Label(root, text='Search Utilities for Singleton Directory or GZIP File ',fo
 # separator.grid(padx=5, pady=5)
 look=PhotoImage(file = r"look.png").subsample(1,1) 
 ttk.Label(root, image=look,background='LIGHTGREEN').grid(row=8,column=0, sticky=W)
+
 
 b_dir.grid(row=11,column=0,sticky=N)
 b_gz.grid(row=12,column=0,sticky=N)
