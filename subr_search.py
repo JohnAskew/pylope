@@ -24,10 +24,6 @@ try:
 except ModuleNotFoundError:
     raise ModuleNotFoundError ('Missing pylope_parameters file. Unable to pass parameters between programs')
 
-
-
-
-
 #--------------------------------------#
 def onselect(evt):
 #--------------------------------------#
@@ -126,43 +122,18 @@ def get_filenames():
             return stringList, search_cnt
 
 #----------------------------------------#
-def write_header(str_header_1,str_search_cnt, search_cnt, str_dir):
+def write_header(l, str_header_1,str_search_cnt, search_cnt, str_dir, str_path):
 #----------------------------------------#
-    l = Listbox(root, height=25, width=150, bg='YELLOW', fg='BLUE', selectmode='multiple')
-    root.wm_iconbitmap(dir_path + "/" + "./py.ico") 
-    l.master.title(">>> PYLope search results <<<")
-    l.grid(column=0, row=0, sticky=(N,E,W,S))
-    r = ttk.Scrollbar(root, orient=HORIZONTAL, command=l.xview)
-    r.grid(column=0, row=1, sticky=(E,W))
-    s = ttk.Scrollbar(root, orient=VERTICAL, command=l.yview)
-    s.grid(column=1, row=0, sticky=(N,S))
-    l['xscrollcommand'] = r.set
-    l['yscrollcommand'] = s.set
-    ttk.Sizegrip().grid(column=1, row=1, sticky=(S,E))
-    root.grid_columnconfigure(0, weight=1)
-    root.grid_rowconfigure(0, weight=1)
 
-    now = datetime.now()
-    now = str(now.strftime("%A %d. %B %Y %I:%M%p"))
-    str_header_1 = str(str_header_1)
-    str_header_1 = str_header_1 + now
-    str_search_cnt = str(str_search_cnt)
-    search_cnt = str(search_cnt)
-    if (len(sys.argv) > 2):
-        if p_case == '1':
-            str_search_cnt = str_tot_1 + p + str_tot_2b + str_any_case + search_cnt
-    else:
-        str_search_cnt = str_tot_1 + p + str_tot_2 + search_cnt
-    l.insert(END, dash_line)
-    l.insert(END, str_header_1)
-    l.insert(END, dash_line)
-    l.insert(END, astr_line)
-    str_path = os.getcwd()
-    str_dir = str_dir + str_path
     l.insert(END, str_dir)
     l.insert(END, astr_line)
     l.insert(END, str_search_cnt)
     l.insert(END, astr_line)
+    return l
+#----------------------------------------#
+def write_report_line(l, str_path, ):
+#----------------------------------------#
+    getfilenames, search_cnt = get_filenames()
     if search_cnt != "0":
         l.config(foreground = 'BLUE',
                  background = 'WHITE',
@@ -173,16 +144,12 @@ def write_header(str_header_1,str_search_cnt, search_cnt, str_dir):
         l.insert(END, str_details)
         l.insert(END, dash_line)
         l.insert(END, spacer_line)
-        #l.config(foreground = 'RED', background = 'YELLOW')
         for filename in getfilenames:
-            filename = str_path + "/" + filename
+            if p_recur_search == '1':
+                filename = str_path + "/" + filename
             l.insert(END, filename)
             l.insert(END, spacer_line)
     return l
-#----------------------------------------#
-def write_report_line():
-#----------------------------------------#
-    pass
 
 #----------------------------------------#
 def write_null_report():
@@ -210,11 +177,52 @@ def write_null_report():
     for filename in get_filenames():
         l.insert(END, filename)
     return l
+
+#----------------------------------------#
+def create_listbox_and_write(str_header_1,str_search_cnt, search_cnt, str_dir, str_path):
+#----------------------------------------#
+    l = Listbox(root, height=25, width=150, bg='YELLOW', fg='BLUE', selectmode='multiple')
+    root.wm_iconbitmap(dir_path + "/" + "./py.ico") 
+    l.master.title(">>> PYLope search results <<<")
+    l.grid(column=0, row=0, sticky=(N,E,W,S))
+    r = ttk.Scrollbar(root, orient=HORIZONTAL, command=l.xview)
+    r.grid(column=0, row=1, sticky=(E,W))
+    s = ttk.Scrollbar(root, orient=VERTICAL, command=l.yview)
+    s.grid(column=1, row=0, sticky=(N,S))
+    l['xscrollcommand'] = r.set
+    l['yscrollcommand'] = s.set
+    ttk.Sizegrip().grid(column=1, row=1, sticky=(S,E))
+    root.grid_columnconfigure(0, weight=1)
+    root.grid_rowconfigure(0, weight=1)
+
+ 
+    str_header_1 = str(str_header_1)
+    global now
+    str_header_1 = str_header_1 + now
+    str_search_cnt = str(str_search_cnt)
+    search_cnt = str(search_cnt)
+    if (len(sys.argv) > 2):
+        if p_case == '1':
+            str_search_cnt = str_tot_1 + p + str_tot_2b + str_any_case + search_cnt
+    else:
+        str_search_cnt = str_tot_1 + p + str_tot_2 + search_cnt
+    l.insert(END, dash_line)
+    l.insert(END, str_header_1)
+    l.insert(END, dash_line)
+    l.insert(END, astr_line)
+    return l
+
 ########################################
-# M A I N   L O G I C
+# S T A R T  H E R E
 ########################################
+#--------------------------------------#
+# H O U S E  K E E P I N G
+#--------------------------------------#
 dir_path = os.path.dirname(os.path.realpath(__file__))
-index = 0
+index =0
+search_cnt = 0
+now = datetime.now()
+now = str(now.strftime("%A %d. %B %Y %I:%M%p"))
 #dir_path = os.getcwd()
 str1 = "***********************************************************"
 str2 = "* NO Search string supplied"
@@ -233,10 +241,15 @@ str_dir        = "Path : "
 str_details =  "*-------------------------------------------------- D E T A I L S ------------------------------------------------------"
 root = Tk()
 global str_path
-str_path = None
+str_path = os.getcwd()
+str_dir = str_dir + str_path
+l = create_listbox_and_write(str_header_1,str_search_cnt, search_cnt, str_dir, str_path)
+########################################
+# M A I N   L O G I C
+########################################
 if p != " ":
-    getfilenames, search_cnt = get_filenames()
-    l = write_header(str_header_1,str_search_cnt, search_cnt, str_dir)
+    l = write_header(l, str_header_1,str_search_cnt, search_cnt, str_dir, str_path)
+    l = write_report_line(l, str_path)
 else:
     l = write_null_report()
 
