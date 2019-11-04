@@ -393,7 +393,7 @@ def main_logic_recur_search():
         except:
             print("PYLope error in main_logic_recur_search. Unable to change to directory:", directory)
 
-    b_rs.config(bg='DARKGREEN', fg='DARKBLUE', text = 'Recursively search a directory for a search string', font='TkDefaultFont')
+    b_rs.config(bg='LIGHTGREEN', fg='DARKBLUE', text = 'Recursively search a directory for a search string', font='TkDefaultFont')
 
 #####################################
 # M A I N   L O G I C
