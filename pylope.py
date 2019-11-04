@@ -436,10 +436,8 @@ separator = Frame(height=15, bd=10, bg='DARKBLUE',relief=RAISED)
 separator.grid(row=17,column=0,sticky=N,ipadx=250, ipady=1)
 
 ttk.Label(root, text='Heavy Lifting Utilities (Click and go for coffee)' ,font='Arial 12 bold' , background='LIGHTYELLOW', foreground='DARKBLUE').grid(row=18,column=0,sticky=N)
-coffee=PhotoImage(file = r"coffee.png").subsample(1,1) 
-ttk.Label(root, image=coffee, background='BEIGE').grid(row=18,column=0,sticky=W)
-coffee1=PhotoImage(file = r"coffee.png").subsample(1,1) 
-ttk.Label(root, image=coffee1, background='BEIGE').grid(row=18,column=0,sticky=E)
+coffee=PhotoImage(file = r"coffee.png").subsample(9,9) 
+ttk.Label(root, image=coffee, background='LIGHTGREEN').grid(row=18,column=0,sticky=W)
 
 separator = Frame(height=15, bd=10,bg='DARKBLUE',relief=RAISED)
 separator.grid(row=19,column=0,ipadx=250,ipady=0,sticky=N)
