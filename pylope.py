@@ -106,7 +106,6 @@ class MainWindow():
         global p
         p = self.myEntryBox.get()
         p = p.split('+')
-        print("pylope.py: Destwin: type(p):" , type(p), "p:", p)
         self.top.destroy()
         global p_clear
         p_clear = 0
@@ -134,7 +133,7 @@ class MyFrame(tk.Frame):
         self.myLabel1.grid(row=1,column=0, sticky=N)
         root.wm_iconbitmap("./py.ico") 
         self.separator = Frame(height=15, bd=3, bg='DARKBLUE',relief=RAISED)
-        self.separator.grid(row=2,column=0,sticky=W, ipadx=250, ipady=5)#, padx=5, pady=5)
+        self.separator.grid(row=2,column=0,sticky=W, ipadx=250, ipady=5)
         self.mySubmitButton1 = tk.Button(parent, anchor=N, bd=5, fg='DARKBLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string', command=self.get_group_name ,font='TkDefaultFont 11 bold')
         self.mySubmitButton1.grid(row=5, padx=5, pady=5)
         separator = Frame(height=5, bd=10, bg='DARKBLUE',relief=RAISED)
@@ -156,6 +155,8 @@ class MyFrame(tk.Frame):
         self.d.config(relief=GROOVE, bd=5, bg='LIGHTGRAY', fg='DARKBLUE', selectcolor='WHITE', width=10, height=-1)
         self.d.grid(row=6, column=0,sticky=E)#, padx=5, pady=5)
         
+
+
         separator = Frame(height=5, bd=10, bg='DARKBLUE',relief=RAISED)
         separator.grid(row=9,ipadx=250,ipady=5,sticky=N,padx=5, pady=1)
 
@@ -209,6 +210,8 @@ class MyFrame(tk.Frame):
     def set_label(self, astr = ''):
 #--------------------------------------#
         self.myLabel1['text'] = astr
+
+
 
 #======================================#
 # End Class
@@ -395,6 +398,25 @@ def main_logic_recur_search():
 
     b_rs.config(bg='LIGHTGREEN', fg='DARKBLUE', text = 'Recursively search a directory for a search string', font='TkDefaultFont')
 
+#--------------------------------------#
+def help_reatz_focus(event=None):
+#--------------------------------------#
+    help_reatz_focus_label.config(text="Extract\nEVERYTHING")
+#--------------------------------------#
+def help_reatz_unfocus(event=None):
+#--------------------------------------#
+    help_reatz_focus_label.config(text="")
+
+#--------------------------------------#
+def help_readtz_focus(event=None):
+#--------------------------------------#
+    help_reatz_focus_label.config(text="Extract all\nin directory")
+#--------------------------------------#
+def help_readtz_unfocus(event=None):
+#--------------------------------------#
+    help_reatz_focus_label.config(text="")
+
+
 #####################################
 # M A I N   L O G I C
 #####################################
@@ -406,11 +428,10 @@ b_dir = tkinter.Button(root,state=DISABLED, text='Open and search SINGLE directo
 b_gz = tkinter.Button(root, state=DISABLED, text='Open, extract and search a SINGLE tar.gz', command=main_logic_tar_gz, width=40)
 b_rs = tkinter.Button(root, state=DISABLED, text = 'Recursively search a directory for a search string', command=main_logic_recur_search, width=40)
 b_xp = tkinter.Button(root, text='Recursively extract >> ALL Tar.GZIP Files<< within a Directory', command=main_logic_xp, bg='DARKGREEN', fg='WHITE',width=47)
-b_xpg = tkinter.Button(root, text='Recursively extract ALL Tar.GZIP Children within a tar.gz file', command=main_logic_xpg, bg='DARKGREEN', fg='WHITE', width=47)
+b_xpg = tkinter.Button(root, text='Recursively extract ALL Tar.GZIP Children within a tar.gz file', command=main_logic_xpg, bg='DARKGREEN', fg='WHITE', width=47,highlightcolor='DARKRED')
 ttk.Label(root, text='Search Utilities for Singleton Directory or GZIP File ',font='Arial 12 bold', background='LIGHTYELLOW', foreground='DARKBLUE').grid(row=8,column=0,sticky=N)
-#ttk.Separator(root,orient=HORIZONTAL).grid(row=8,sticky=W,ipadx=250, ipady=5)
-# separator = Frame(height=15, bd=3, bg='DARKBLUE',relief=RAISED)
-# separator.grid(padx=5, pady=5)
+
+
 look=PhotoImage(file = r"look.png").subsample(1,1) 
 ttk.Label(root, image=look,background='LIGHTGREEN').grid(row=8,column=0, sticky=W)
 
@@ -436,7 +457,7 @@ separator = Frame(height=15, bd=10, bg='DARKBLUE',relief=RAISED)
 separator.grid(row=17,column=0,sticky=N,ipadx=250, ipady=1)
 
 ttk.Label(root, text='Heavy Lifting Utilities (Click and go for coffee)' ,font='Arial 12 bold' , background='LIGHTYELLOW', foreground='DARKBLUE').grid(row=18,column=0,sticky=N)
-coffee=PhotoImage(file = r"coffee.png").subsample(9,9) 
+coffee=PhotoImage(file = r"coffee.png").subsample(9,12) 
 ttk.Label(root, image=coffee, background='LIGHTGREEN').grid(row=18,column=0,sticky=W)
 
 separator = Frame(height=15, bd=10,bg='DARKBLUE',relief=RAISED)
@@ -444,4 +465,14 @@ separator.grid(row=19,column=0,ipadx=250,ipady=0,sticky=N)
 
 b_xp.grid(row=20)
 b_xpg.grid(row=21)
+
+help_readtz_focus_label = tk.Label(text="", width=10, height=2)
+help_readtz_focus_label.grid(row=19,column=0,rowspan=3,sticky=W)
+b_xp.bind("<Enter>", help_readtz_focus)
+b_xp.bind("<Leave>", help_readtz_unfocus)
+
+help_reatz_focus_label = tk.Label(text="", width=10, height=2)
+help_reatz_focus_label.grid(row=19,column=0,rowspan=3,sticky=W)
+b_xpg.bind("<Enter>", help_reatz_focus)
+b_xpg.bind("<Leave>", help_reatz_unfocus)
 root.mainloop()
