@@ -1,5 +1,5 @@
 import os, sys
-p = " "     #sys.argv[1] ==> poor programmming, that's why
+p = []   #sys.argv[1] ==> poor programmming, that's why
 p_case = 0  #sys.argv[2] ==> again, poor programming, that's why
 p_whole = 0 #sys.argv[3] ==>
 p_clear = 0 #sys.argv[4] ==>

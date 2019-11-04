@@ -105,13 +105,15 @@ class MainWindow():
         # call callback function setting value in MyFrame
         global p
         p = self.myEntryBox.get()
+        p = p.split('+')
+        print("pylope.py: Destwin: type(p):" , type(p), "p:", p)
         self.top.destroy()
         global p_clear
         p_clear = 0
         if len(p) > 0:
-            x = "Searching >> " + p
+            x = "Searching >> " + str(p)
             mf.mySubmitButton1.config(text = x)
-            if p != '':
+            if p != []:
                 b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
                 b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
                 b_rs.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
@@ -179,7 +181,7 @@ class MyFrame(tk.Frame):
         global p_clear, p_case, p
         p_clear = self.var_clear.get()
         if p_clear == 1:
-            p = " "
+            p = []
             p_case = 0
             b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
             b_dir.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
@@ -189,7 +191,7 @@ class MyFrame(tk.Frame):
             self.d.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
 
 
-        if  (p == None or p == " " or p == '') and p_clear == 0:
+        if  (p == [] or p == None or p == " " or p == '') and p_clear == 0:
             b_gz.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
             b_dir.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
   
@@ -420,11 +422,11 @@ separator = Frame(height=15, bd=10, bg='DARKBLUE',relief=RAISED)
 separator.grid(row=13,column=0,ipadx=250, ipady=0)
 
 
-ttk.Label(root, text='Recursive Searches for Multiple Directories and GZIP Files',font='Arial 12 bold',  background='LIGHTYELLOW',foreground='DARKBLUE').grid(row=14, column=0, sticky=N)
+ttk.Label(root, text='Recursive Searches for Multiple Directories and GZIP Files',font='Arial 12 bold',  background='LIGHTYELLOW',foreground='DARKBLUE').grid(row=14, column=0, sticky=NE)
 
 separator = Frame(height=15, bd=10, bg='DARKBLUE',relief=RAISED)
 separator.grid(row=15,column=0,ipadx=250,ipady=0)
-search=PhotoImage(file = r"search.png",).subsample(1,1) 
+search=PhotoImage(file = r"search.png",).subsample(6,6) 
 ttk.Label(root, image=search, background = 'LIGHTGREEN').grid(row=14,sticky=W)
 
 b_rs.grid(row=16,column=0,sticky=N)

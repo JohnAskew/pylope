@@ -92,7 +92,7 @@ def get_filenames():
     if (len(sys.argv) < 2):
         return os.listdir('.')
     else:
-        if p != " ":
+        if p != []:
             stringList = []
             search_cnt = 0
             for i in os.listdir('.'):
@@ -124,16 +124,20 @@ def get_filenames():
 #----------------------------------------#
 def write_header(l, str_header_1,str_search_cnt, search_cnt, str_dir, str_path):
 #----------------------------------------#
-
+    if (len(sys.argv) > 2):
+        if p_case == '1':
+            str_search_cnt = str_tot_1 + str(p) + str_tot_2b + str_any_case + str(search_cnt)
+    else:
+        str_search_cnt = str_tot_1 + str(p) + str_tot_2 + str(search_cnt)
     l.insert(END, str_dir)
     l.insert(END, astr_line)
     l.insert(END, str_search_cnt)
     l.insert(END, astr_line)
     return l
 #----------------------------------------#
-def write_report_line(l, str_path, ):
+def write_report_line(l, str_path, getfilenames ):
 #----------------------------------------#
-    getfilenames, search_cnt = get_filenames()
+
     if search_cnt != "0":
         l.config(foreground = 'BLUE',
                  background = 'WHITE',
@@ -201,11 +205,7 @@ def create_listbox_and_write(str_header_1,str_search_cnt, search_cnt, str_dir, s
     str_header_1 = str_header_1 + now
     str_search_cnt = str(str_search_cnt)
     search_cnt = str(search_cnt)
-    if (len(sys.argv) > 2):
-        if p_case == '1':
-            str_search_cnt = str_tot_1 + p + str_tot_2b + str_any_case + search_cnt
-    else:
-        str_search_cnt = str_tot_1 + p + str_tot_2 + search_cnt
+   
     l.insert(END, dash_line)
     l.insert(END, str_header_1)
     l.insert(END, dash_line)
@@ -243,13 +243,15 @@ root = Tk()
 global str_path
 str_path = os.getcwd()
 str_dir = str_dir + str_path
+if p != []:
+    getfilenames, search_cnt = get_filenames()
 l = create_listbox_and_write(str_header_1,str_search_cnt, search_cnt, str_dir, str_path)
 ########################################
 # M A I N   L O G I C
 ########################################
-if p != " ":
+if p != []:
     l = write_header(l, str_header_1,str_search_cnt, search_cnt, str_dir, str_path)
-    l = write_report_line(l, str_path)
+    l = write_report_line(l, str_path,getfilenames)
 else:
     l = write_null_report()
 
