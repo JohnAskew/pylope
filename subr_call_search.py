@@ -14,7 +14,6 @@ except ModuleNotFoundError:
 #--------------------------------------#
 def call_subr_search(p, p_case, p_whole, p_clear, call, p_recur_search, p_file):
 #--------------------------------------#
-     
     if p_clear == '1':
         subprocess.call(["python", dir_path + "/" + "subr_search.py"])
     elif (p != []) & (p_case == '1') & (p_whole == '1'):

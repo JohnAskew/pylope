@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 import os
+from os import access, R_OK
 try:
     from datetime import datetime
 except:
@@ -48,8 +49,12 @@ def openfile(event):
         str_path = '.'
     x = index_start
     p_file = l.get(x).split()[0]
-    #p_file = str_path + "/" + p_file
-    
+    global p
+    if p == []:
+        p = ""
+    else:
+        p = str(p).split("+")
+        p = p[0]
     try:
         subprocess.Popen(["python", dir_path + "/" + "viewpad.py",  str(p), str(p_case), str(p_whole), str(p_clear), str(call), str(p_recur_search), str(p_file)])#p_file , p])
     except:
@@ -97,24 +102,34 @@ def get_filenames():
             search_cnt = 0
             for i in os.listdir('.'):
                 try:
-                    with open(i, encoding="utf-8") as x:
-                        line = x.readline()
-                        cnt = 1
-                        while line:
-                            if (len(sys.argv) > 2):
-                                if p_case == '1':
-                                    z = line.lower().find(p.lower())
-                                else:
-                                    z = line.find(p)
-                            else:
-                                z = line.find(p)
-                            if z > -1:
-                                search_cnt += 1
-                                #DEBUG print("search_cnt:", search_cnt, "File {} : Line {} : offset {}: {}".format(i, cnt, z, line.strip()))
-                                stringList.append("{} : Line {} : offset {}:      {}".format(i, cnt, z, line.strip()))
-                                
+                    if os.path.isfile(i) and os.access(i, os.R_OK):
+                        with open(i, encoding="utf-8") as x:
                             line = x.readline()
-                            cnt += 1
+                            cnt = 1
+                            while line:
+                                ###
+                                ### Process p as List of search terms.
+                                ###
+                                term_found = 1 # True, assumed. Loop thru p and is false, break and do next line.
+                                for p_term in p.split("+"):
+                                    if (len(sys.argv) > 2):
+                                        if p_case == '1':
+                                            z = line.lower().find(p_term.lower())
+                                        else:
+                                            z = line.find(p_term)
+                                    else:
+                                        z = line.find(p_term)
+                                    if z == -1:
+                                    ###
+                                    ### IF any p_term is false, break and do next line.
+                                    ###
+                                        term_found = 0
+                                        break
+                                if term_found:
+                                    search_cnt += 1
+                                    stringList.append("{} : Line {} : offset {}:      {}".format(i, cnt, z, line.strip()))
+                                line = x.readline()
+                                cnt += 1
                 except:
                     temp_str = "Unable to open " + i + "...SKIPPING. Maybe binary data?"
                     stringList.append(temp_str)

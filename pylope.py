@@ -105,7 +105,6 @@ class MainWindow():
         # call callback function setting value in MyFrame
         global p
         p = self.myEntryBox.get()
-        p = p.split('+')
         self.top.destroy()
         global p_clear
         p_clear = 0
