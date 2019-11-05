@@ -114,7 +114,7 @@ class MainWindow():
             if p != []:
                 b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
                 b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
-                b_rs.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
+                #b_rs.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
 
     #--------------------------------------#
     def set_callback(self, a_func):
@@ -201,7 +201,7 @@ class MyFrame(tk.Frame):
         mw = MainWindow(None)
         mw.set_callback(self.set_label)
         self.c.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
-        self.d.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
+        #self.d.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
 
 
 
@@ -323,7 +323,7 @@ def main_logic_tar_gz():
     b_dir.config(state=NORMAL)
     b_xp.config(state=NORMAL)
     b_xpg.config(state=NORMAL)
-    b_rs.config(state=NORMAL)
+    #b_rs.config(state=NORMAL)
 #--------------------------------------#
 def main_logic_directory():
 #--------------------------------------#
