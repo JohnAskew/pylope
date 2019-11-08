@@ -40,9 +40,6 @@ try:
 except ModuleNotFoundError:
     raise ModuleNotFoundError ('Missing pylope_parameters file. Unable to pass parameters between programs')
 
-#-----------------
-sysarg_len = 4 #Number of arguments I can pass
-#-----------------
 user = getpass.getuser()
 root = tkinter.Tk()
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -105,16 +102,17 @@ class MainWindow():
         # call callback function setting value in MyFrame
         global p
         p = self.myEntryBox.get()
+        print("type(p):", type(p), "p:", p)
         self.top.destroy()
         global p_clear
         p_clear = 0
         if len(p) > 0:
             x = "Searching >> " + str(p)
             mf.mySubmitButton1.config(text = x)
-            if p != []:
+            if p != [] and p != " " and p != "" and p != None:
                 b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
                 b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
-                #b_rs.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
+                b_rs.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
 
     #--------------------------------------#
     def set_callback(self, a_func):
@@ -185,7 +183,7 @@ class MyFrame(tk.Frame):
             p_case = 0
             b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
             b_dir.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
-            b_rs.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
+            b_rs.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
             mf.mySubmitButton1.config(fg='DARKBLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string')
             self.c.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
             self.d.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
@@ -217,7 +215,7 @@ class MyFrame(tk.Frame):
 #======================================#
 
 #--------------------------------------#
-def call_subr_search():
+def call_subr_search(p , p_case, p_whole, p_clear, call, p_recur_search, p_file):
 #--------------------------------------#
     subprocess.call(["python", dir_path + "/" + "subr_call_search.py",  p, str(p_case), str(p_whole), str(p_clear), str(call), str(p_recur_search) , str(p_file)])
 
@@ -238,8 +236,10 @@ def process_tar_gz(f, call=1):
 #--------------------------------------#
 def extract_gz(file, call = 1):
 #--------------------------------------#
+    print("pylope.py:extract_gz: file:", file, "call:", call)
     dir = os.path.dirname(file) # get directory where file is stored
     filename = os.path.basename(file) # get filename
+    print("pylope.py:extract_gz: filename:", filename)
     
     file_tar, file_tar_ext = os.path.splitext(file) # split into file.tar and .gz
     
@@ -261,7 +261,7 @@ def extract_gz(file, call = 1):
         os.chdir(file_untar)
 
         if call:
-            call_subr_search()
+            call_subr_search(p , p_case, p_whole, p_clear, call, p_recur_search, p_file)
 
 #--------------------------------------#
 def extract_tgz(f, call =  1):
@@ -277,7 +277,7 @@ def extract_tgz(f, call =  1):
                 os.chdir(filename)
                 cnt +=1
                 if call:
-                    call_subr_search()
+                    call_subr_search(p , p_case, p_whole, p_clear, call, p_recur_search, p_file)
     tar.close()
 #--------------------------------------#
 def extract_tar(file, call = 1):
@@ -300,7 +300,7 @@ def extract_tar(file, call = 1):
     tar.close()
     os.chdir(file_untar)
     if call:
-        call_subr_search()
+        call_subr_search(p , p_case, p_whole, p_clear, call, p_recur_search, p_file)
     #DEBUG else:
         #DEBUG print("extract_tar bypassing call_subr_search with call:", call)
 
@@ -323,7 +323,7 @@ def main_logic_tar_gz():
     b_dir.config(state=NORMAL)
     b_xp.config(state=NORMAL)
     b_xpg.config(state=NORMAL)
-    #b_rs.config(state=NORMAL)
+    b_rs.config(state=NORMAL)
 #--------------------------------------#
 def main_logic_directory():
 #--------------------------------------#
@@ -332,7 +332,7 @@ def main_logic_directory():
  
     if os.path.exists(f):
         os.chdir(f)
-        call_subr_search()
+        call_subr_search(p , p_case, p_whole, p_clear, call, p_recur_search, p_file)
     b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE', text='Open and search single directory containing logs', font='TkDefaultFont')
 
 #--------------------------------------#
@@ -367,10 +367,14 @@ def main_logic_xpg():
     
     try:
         os.chdir(directory)
-        extract_gz(f)
     except:
         print("PYlope function: main_logic_xpg unable to change directory", directory)
-    
+        sys.exit(0)
+    try:
+        extract_gz(f, call = 0)
+    except:
+        print("PYlope: main_logic_xpd: unable to perform extract_gz(f) using f:", f)
+        sys.exit(0)
     for dirName, subdirList, fileList in os.walk(os.getcwd()):
             #print('Found directory %s ' % dirName)
         for fname in fileList:
@@ -385,15 +389,24 @@ def main_logic_xpg():
     b_xpg.configure(text='Extract >> ALL << in tar.gz', font='TkDefaultFont', bg='DARKGREEN', fg='BEIGE')
 
 #--------------------------------------#
-def main_logic_recur_search():
+def main_logic_recur_search(p_recur_search = 1, call=1):
 #--------------------------------------#
     b_rs.configure(bg='RED', fg='WHITE', text='Recursively searching directories for search string', font='Arial 8 bold')
     directory = class_main_logic_for_file_and_dir.get_directory()
+    # p_recur_search = 1
+    # call = 1
     if os.path.exists(directory):
         try:
             os.chdir(directory)
+            try:
+                if call == 1:
+                    call_subr_search(p , str(p_case), str(p_whole), str(p_clear), str(call), str(p_recur_search), str(p_file))
+            except:
+                print("PYLope:main_logic_recur_search: Died trying to call_subr_search().")
+                sys.exit(0)
         except:
             print("PYLope error in main_logic_recur_search. Unable to change to directory:", directory)
+    
 
     b_rs.config(bg='LIGHTGREEN', fg='DARKBLUE', text = 'Recursively search a directory for a search string', font='TkDefaultFont')
 

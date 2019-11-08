@@ -53,7 +53,6 @@ def openfile(event):
     if p == []:
         p = ""
     else:
-        p = str(p).split("+")
         p = p[0]
     try:
         subprocess.Popen(["python", dir_path + "/" + "viewpad.py",  str(p), str(p_case), str(p_whole), str(p_clear), str(call), str(p_recur_search), str(p_file)])#p_file , p])
@@ -93,8 +92,14 @@ def onsaveas():
 #----------------------------------------#
 def get_filenames():
 #----------------------------------------#
-    
-    if (len(sys.argv) < 2):
+    if p == [] and p_recur_search == '1': #Recursive directory search
+        files = [ 
+        os.path.join(parent, name)
+        for (parent, subdirs, files) in os.walk(str_path)
+        for name in files + subdirs
+        ]
+        return files
+    if p == [] and p_recur_search != '1': # Single directory search
         return os.listdir('.')
     else:
         if p != []:
@@ -139,9 +144,8 @@ def get_filenames():
 #----------------------------------------#
 def write_header(l, str_header_1,str_search_cnt, search_cnt, str_dir, str_path):
 #----------------------------------------#
-    if (len(sys.argv) > 2):
-        if p_case == '1':
-            str_search_cnt = str_tot_1 + str(p) + str_tot_2b + str_any_case + str(search_cnt)
+    if p_case == '1':
+        str_search_cnt = str_tot_1 + str(p) + str_tot_2b + str_any_case + str(search_cnt)
     else:
         str_search_cnt = str_tot_1 + str(p) + str_tot_2 + str(search_cnt)
     l.insert(END, str_dir)
@@ -164,6 +168,7 @@ def write_report_line(l, str_path, getfilenames ):
         l.insert(END, dash_line)
         l.insert(END, spacer_line)
         for filename in getfilenames:
+            file_path, file_base =os.path.split(filename)
             if p_recur_search == '1':
                 filename = str_path + "/" + filename
             l.insert(END, filename)
@@ -171,10 +176,10 @@ def write_report_line(l, str_path, getfilenames ):
     return l
 
 #----------------------------------------#
-def write_null_report():
+def write_null_header():
 #----------------------------------------#
     l = Listbox(root, height=25, width=85, bg='WHITE', fg='RED')
-    root.wm_iconbitmap("./py.ico") 
+    root.wm_iconbitmap(dir_path + "/py.ico") 
     l.grid(column=0, row=0, sticky=(N,E,W,S))
     s = ttk.Scrollbar(root, orient=VERTICAL, command=l.yview)
     s.grid(column=1, row=0, sticky=(N,S))
@@ -193,6 +198,11 @@ def write_null_report():
              selectbackground = 'ORANGE',
              selectforeground = 'DARKBLUE',
              selectmode='multiple')
+    return l
+#----------------------------------------#
+def write_null_report():
+#----------------------------------------#
+
     for filename in get_filenames():
         l.insert(END, filename)
     return l
@@ -200,7 +210,7 @@ def write_null_report():
 #----------------------------------------#
 def create_listbox_and_write(str_header_1,str_search_cnt, search_cnt, str_dir, str_path):
 #----------------------------------------#
-    l = Listbox(root, height=25, width=150, bg='YELLOW', fg='BLUE', selectmode='multiple')
+    l = Listbox(root, height=25, width=150, bg='BEIGE', fg='BLUE', selectmode='multiple')
     root.wm_iconbitmap(dir_path + "/" + "./py.ico") 
     l.master.title(">>> PYLope search results <<<")
     l.grid(column=0, row=0, sticky=(N,E,W,S))
@@ -235,6 +245,7 @@ def create_listbox_and_write(str_header_1,str_search_cnt, search_cnt, str_dir, s
 #--------------------------------------#
 dir_path = os.path.dirname(os.path.realpath(__file__))
 index =0
+global search_cnt
 search_cnt = 0
 now = datetime.now()
 now = str(now.strftime("%A %d. %B %Y %I:%M%p"))
@@ -254,6 +265,9 @@ str_tot_2b     = "] "
 str_any_case   = "( any case ) : "
 str_dir        = "Path : "
 str_details =  "*-------------------------------------------------- D E T A I L S ------------------------------------------------------"
+########################################
+# M A I N   L O G I C
+########################################
 root = Tk()
 global str_path
 str_path = os.getcwd()
@@ -261,18 +275,32 @@ str_dir = str_dir + str_path
 if p != []:
     getfilenames, search_cnt = get_filenames()
 l = create_listbox_and_write(str_header_1,str_search_cnt, search_cnt, str_dir, str_path)
-########################################
-# M A I N   L O G I C
-########################################
-if p != []:
+
+hold_p = []
+if len(p) > 0:
+    for x in p.split("+"):
+        hold_p.append(x)
+p = hold_p
+
+if p != [] and p_recur_search != '1':
     l = write_header(l, str_header_1,str_search_cnt, search_cnt, str_dir, str_path)
     l = write_report_line(l, str_path,getfilenames)
-else:
+if p != [] and p_recur_search == '1':
+    l = write_header(l, str_header_1,str_search_cnt, search_cnt, str_dir, str_path)
+    l = write_report_line(l, str_path,getfilenames)   
+if p == [] :#and p_recur_search != '1':
+    l = write_null_header()
     l = write_null_report()
 
 l.bind('<<ListboxSelect>>', onselect)
 l.bind('<FocusOut>', lambda e: l.selection_clear(0, END))
 l.bind("<Button-3>", openfile)
+r = ttk.Scrollbar(root, orient=HORIZONTAL, command=l.xview)
+r.grid(column=0, row=1, sticky=(E,W))
+s = ttk.Scrollbar(root, orient=VERTICAL, command=l.yview)
+s.grid(column=1, row=0, sticky=(N,S))
+l['xscrollcommand'] = r.set
+l['yscrollcommand'] = s.set
 root.bind("deleteButton", ondelete)
 root.bind("saveasButton", onsaveas)  
 deleteButton = Button(root, text='Delete', underline = 0, command=ondelete)

@@ -164,7 +164,7 @@ class Viewpad:
             self.__file = file_2_open
             askopenfilename(defaultextension=".txt", 
                             initialfile = file_2_open,
-
+                            initialdir=os.getcwd(),
                             filetypes=[("All Files","*.*"),
                                        ("Logs", "*.log *.1 *.2 *.3 *.4 *.5 *.6 *.7 *.8 *.9"),
                                        ("Text Documents","*.txt")]) 
