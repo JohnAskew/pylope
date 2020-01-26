@@ -1,47 +1,87 @@
 import os
+
 try:
+
     from datetime import datetime
+
 except:
+
     os.system('pip install datetime')
+
     from datetime import datetime
+
 try:
+
     import gzip
+
 except:
+
     os.system('pip install gzip')
+
     import gzip
+
 try:
+
     import tkinter as tk
+
     from tkinter import *
+
     import tkinter.filedialog
+
 except:
+
     os.system('pip install tkinter')
+
     import tkinter as tk
+
     from tkinter import *
+
     import tkinter.filedialog
+
 from tkinter import ttk
+
 try:
+
     import tarfile
+
 except:
+
     os.system('pip install tarfile')
+
     import tarfile
+
 try:
+
     import getpass
+
 except:
+
     os.system('pip install getpass')
+
     import getpass
+
 try:
+
     import subprocess
+
 except:
+
     os.system("pip install subprocess")
+
     import subprocess
 
 try:
+
     from pylope_parameters import *
+
 except ModuleNotFoundError:
+
     raise ModuleNotFoundError ('Missing pylope_parameters file. Unable to pass parameters between programs')
 
 user = getpass.getuser()
+
 root = tkinter.Tk()
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -67,6 +107,7 @@ class class_main_logic_for_file_and_dir:
                    ('7zip', '.7z')]
 
         )
+
         return f
 #--------------------------------------#
     def get_directory():
@@ -79,6 +120,7 @@ class class_main_logic_for_file_and_dir:
 
             )
         return f
+
 #======================================#
 # End Class
 #======================================#
@@ -87,31 +129,51 @@ class class_main_logic_for_file_and_dir:
 class MainWindow():
 #======================================#
     def __init__(self, parent):
+
         top = self.top = tk.Toplevel(parent)
+
         self.myLabel = tk.Label(top, text='Click OK to enter search string')
+
         self.myLabel.pack()
+
         self.myEntryBox = tk.Entry(top)
+
         self.myEntryBox.focus_set()
+
         self.myEntryBox.pack()
+
         self.mySubmitButton = tk.Button(top, text='OK', command=self.DestWin)
+
         self.mySubmitButton.pack()
-        
+
     #--------------------------------------#
     def DestWin(self):
     #--------------------------------------#
         # call callback function setting value in MyFrame
         global p
+        
         p = self.myEntryBox.get()
+        
         print("type(p):", type(p), "p:", p)
+        
         self.top.destroy()
+        
         global p_clear
+        
         p_clear = 0
+        
         if len(p) > 0:
+        
             x = "Searching >> " + str(p)
+        
             mf.mySubmitButton1.config(text = x)
+        
             if p != [] and p != " " and p != "" and p != None:
+        
                 b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
+        
                 b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
+        
                 b_rs.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
 
     #--------------------------------------#
@@ -124,91 +186,121 @@ class MainWindow():
 class MyFrame(tk.Frame):
 #======================================#
     def __init__(self, parent, **kwargs):
+        
         super().__init__(parent, **kwargs)
+        
         self.grid(row=0, column=0)
+        
         self.myLabel1 = tk.Label(parent, fg='DARKBLUE',bg='LIGHTYELLOW', text='Python Log Toolkit: Open, Extract & Search utility',font='Arial 12 bold')
+        
         self.myLabel1.grid(row=1,column=0, sticky=N)
+        
         root.wm_iconbitmap("./py.ico") 
+        
         self.separator = Frame(height=15, bd=3, bg='DARKBLUE',relief=RAISED)
+        
         self.separator.grid(row=2,column=0,sticky=W, ipadx=250, ipady=5)
+        
         self.mySubmitButton1 = tk.Button(parent, anchor=N, bd=5, fg='DARKBLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string', command=self.get_group_name ,font='TkDefaultFont 11 bold')
+        
         self.mySubmitButton1.grid(row=5, padx=5, pady=5)
+        
         separator = Frame(height=5, bd=10, bg='DARKBLUE',relief=RAISED)
+        
         separator.grid(row=7,ipadx=250,ipady=5,sticky=N,padx=5, pady=1)
-
+        
         self.var_case = IntVar()
+        
         self.var_whole = IntVar()
+ 
         self.var_clear = IntVar()
+ 
         global c
+ 
         self.c = Checkbutton(root, text="Any Case", variable=self.var_case, command=self.cb_case, activebackground = 'GREEN',state=DISABLED)
+ 
         self.c.config(relief=GROOVE, bd=5, bg='LIGHTGRAY', fg='DARKBLUE', selectcolor='WHITE', width=10, height=-1)
+ 
         self.c.grid(row=6, column=0,sticky=W, padx=5, pady=5)
         
         self.e = Checkbutton(root, text="Clear search; Just list contents", variable=self.var_clear, command=self.cb_clear, activebackground = 'GREEN')
+ 
         self.e.config(relief=GROOVE, bd=5, bg='LIGHTGREEN', fg='DARKBLUE', selectcolor='WHITE', width=25, height=0)
+ 
         self.e.grid(row=6,column=0, padx=5, pady=5,sticky=N)
 
         self.d = Checkbutton(root, text="Whole word", variable=self.var_whole, command=self.cb_whole, activebackground = 'GREEN',state=DISABLED)
+ 
         self.d.config(relief=GROOVE, bd=5, bg='LIGHTGRAY', fg='DARKBLUE', selectcolor='WHITE', width=10, height=-1)
+ 
         self.d.grid(row=6, column=0,sticky=E)#, padx=5, pady=5)
-        
-
-
+ 
         separator = Frame(height=5, bd=10, bg='DARKBLUE',relief=RAISED)
-        separator.grid(row=9,ipadx=250,ipady=5,sticky=N,padx=5, pady=1)
 
-        
+        separator.grid(row=9,ipadx=250,ipady=5,sticky=N,padx=5, pady=1)
 
 
 #--------------------------------------#
     def cb_case(self): 
 #--------------------------------------#
         global p_case
+        
         p_case = self.var_case.get()
+        
         return p_case
 
 #--------------------------------------#
     def cb_whole(self):
 #--------------------------------------#
         global p_whole
+        
         p_whole = self.var_whole.get()
        
 #--------------------------------------#
     def cb_clear(self):
 #--------------------------------------#
         global p_clear, p_case, p
+        
         p_clear = self.var_clear.get()
+        
         if p_clear == 1:
+        
             p = []
+        
             p_case = 0
+        
             b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
+        
             b_dir.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
+        
             b_rs.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
+        
             mf.mySubmitButton1.config(fg='DARKBLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string')
+        
             self.c.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
+        
             self.d.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
 
 
         if  (p == [] or p == None or p == " " or p == '') and p_clear == 0:
+        
             b_gz.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
+        
             b_dir.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
   
 #--------------------------------------#
     def get_group_name(self):
 #--------------------------------------#
         mw = MainWindow(None)
+        
         mw.set_callback(self.set_label)
+        
         self.c.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
-        #self.d.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
-
-
-
+        
 #--------------------------------------#
     def set_label(self, astr = ''):
 #--------------------------------------#
         self.myLabel1['text'] = astr
-
-
 
 #======================================#
 # End Class
@@ -217,19 +309,22 @@ class MyFrame(tk.Frame):
 #--------------------------------------#
 def call_subr_search(p , p_case, p_whole, p_clear, call, p_recur_search, p_file):
 #--------------------------------------#
-    subprocess.call(["python", dir_path + "/" + "subr_call_search.py",  p, str(p_case), str(p_whole), str(p_clear), str(call), str(p_recur_search) , str(p_file)])
+    subprocess.call(["python", dir_path + "/" + "subr_call_search.py",  str(p), str(p_case), str(p_whole), str(p_clear), str(call), str(p_recur_search) , str(p_file)])
 
 #--------------------------------------#
 def process_tar_gz(f, call=1):
 #--------------------------------------#
 
     if (f.endswith("tar")):
+   
         extract_tar(f, call)
 
     if (f.endswith("tgz")):
+   
         extract_tgz(f, call)
  
     if (f.endswith("gz")):
+   
         extract_gz(f, call)
 
 
@@ -393,19 +488,29 @@ def main_logic_recur_search(p_recur_search = 1, call=1):
 #--------------------------------------#
     b_rs.configure(bg='RED', fg='WHITE', text='Recursively searching directories for search string', font='Arial 8 bold')
     directory = class_main_logic_for_file_and_dir.get_directory()
-    # p_recur_search = 1
-    # call = 1
-    if os.path.exists(directory):
-        try:
-            os.chdir(directory)
-            try:
-                if call == 1:
-                    call_subr_search(p , str(p_case), str(p_whole), str(p_clear), str(call), str(p_recur_search), str(p_file))
-            except:
-                print("PYLope:main_logic_recur_search: Died trying to call_subr_search().")
-                sys.exit(0)
-        except:
-            print("PYLope error in main_logic_recur_search. Unable to change to directory:", directory)
+
+    os.chdir(directory)
+    loopDirList = []
+    try:
+       
+        for dirName, subdirList, fileList in os.walk(directory):
+
+            if len(dirName) > 0 and len(fileList) > 0 and len(subdirList) == 0:
+                loopDirList.append(dirName)
+                os.chdir(dirName)
+                print("New dir. to make call is", os.getcwd())
+                try:
+                    if call == 1:
+                        call_subr_search(p , str(p_case), str(p_whole), str(p_clear), str(call), str(p_recur_search), str(p_file))
+                except Exception as e:
+                    print("PYLope:main_logic_recur_search: Died trying to call_subr_search().")
+                    print(e)
+                    sys.exit(0)
+
+
+    except Exception as e:
+        print("PYLope : main_logic_recur_search --> Error in parsing the directory", directory)
+        print(e)
     
 
     b_rs.config(bg='LIGHTGREEN', fg='DARKBLUE', text = 'Recursively search a directory for a search string', font='TkDefaultFont')
