@@ -1,14 +1,34 @@
 # name: subr_search.py
 # desc: Search and list findings, pass to viewpad.py
 import tkinter as tk
+
 from tkinter import *
+
 from tkinter import ttk
+
 import os
+
 from os import access, R_OK
+
 try:
-    from datetime import datetime
+
+    import platform
+
 except:
+
+    os.system('pip install platform')
+
+    import platform
+
+
+try:
+
+    from datetime import datetime
+
+except:
+
     os.system('pip install datetime')
+
     from datetime import datetime
 try:
     import subprocess
@@ -179,7 +199,11 @@ def write_report_line(l, str_path, getfilenames ):
 def write_null_header():
 #----------------------------------------#
     l = Listbox(root, height=25, width=85, bg='WHITE', fg='RED')
-    root.wm_iconbitmap(dir_path + "/py.ico") 
+    
+    if platform.system() == 'Windows':
+
+        root.wm_iconbitmap("./py.ico") 
+
     l.grid(column=0, row=0, sticky=(N,E,W,S))
     s = ttk.Scrollbar(root, orient=VERTICAL, command=l.yview)
     s.grid(column=1, row=0, sticky=(N,S))

@@ -48,7 +48,6 @@ class Viewpad:
         self.__file = file_2_open
         # Set icon 
         try: 
-            #self.__root.wm_iconbitmap("Notepad.ico")
             self.__root.wm_iconbitmap("./py.ico") 
         except: 
             pass
@@ -249,10 +248,7 @@ class Viewpad:
 #-------------------------------------#
 def get_idx_table(s,idx_table = []):
 #-------------------------------------#
-    #global prev_search
-    # if s == prev_search and len(idx_table) > 0 :
-    #     return idx_table
-    #prev_search = s
+
     idx_table = []
     cnt = 1
     idx = '1.0'
@@ -270,19 +266,16 @@ def find():
     viewpad._Viewpad__thisTextArea.tag_delete('found')#, '1.0', END)
     viewpad._Viewpad__thisTextArea.tag_delete("highlight")#, '1.0', END)
     s = edit.get()
-    print("find: s = edit.get():", s)
     if s:
         cnt = 1
         idx = '1.0'
         global idx_table
         idx_table = []
         idx_table = get_idx_table(s)
-        print("find: idx_table for s:", idx_table)
         if len(idx_table) > 0:
             for idx in idx_table:
                 cnt += 1
                 lastidx = '%s+%dc' % (idx, len(s))
-                print("find: idx:", idx, "len(s):", len(s), "lastidx:", lastidx, "s=", s)
                 viewpad._Viewpad__thisTextArea.tag_add('found', idx, lastidx)
                 idx = lastidx
                 viewpad._Viewpad__thisTextArea.see(idx_table[0])

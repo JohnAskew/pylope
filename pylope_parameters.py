@@ -5,7 +5,7 @@ p_whole = 0 #sys.argv[3] ==>
 p_clear = 0 #sys.argv[4] ==>
 call = 1    #sys.argv[5] ==>
 p_recur_search = 0 #sys.argv[6]
-p_file = "" #sys.argv[7]
+p_file = [""] #sys.argv[7]
 num_sysargv = 8 #Include sys.argv[0] - the calling program.
 
 error_to_return = (os.path.basename(__file__), "has error with sys.argv. len:", len(sys.argv), "sys.argv:", sys.argv)
