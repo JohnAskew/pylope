@@ -642,47 +642,29 @@ def help_readtz_unfocus(event=None):
 
 mf = MyFrame(root)
 
-#E0 b_dir = tkinter.Button(root,state=DISABLED, text='Open and search SINGLE directory containing logs', command=main_logic_directory, width=40)
-
-
 b_rs = tkinter.Button(root, state=DISABLED, text = 'Recursively search a directory for a search string', command=main_logic_recur_search, width=40)
 
 b_xp = tkinter.Button(root, text='Recursively extract >> ALL Tar.GZIP Files<< within a Directory', command=main_logic_xp, bg='DARKGREEN', fg='WHITE',width=47)
 
 b_xpg = tkinter.Button(root, text='Recursively extract ALL Tar.GZIP Children within a tar.gz file', command=main_logic_xpg, bg='DARKGREEN', fg='WHITE', width=47,highlightcolor='DARKRED')
 
-look=PhotoImage(file = r"search.png").subsample(6,6) 
+look=PhotoImage(file = r"search.png").subsample(4,4) 
 
 ttk.Label(root, image=look,background='LIGHTGREEN').grid(row=8,column=0, sticky=W)
 
-#EO b_dir.grid(row=11,column=0,sticky=N)
+ttk.Label(root, text=' Search Recursively',font='Arial 12 bold',  background='LIGHTYELLOW',foreground='DARKBLUE').grid(row=8, column=0, sticky=N)
 
+b_rs.grid(row=8,column=0,sticky=S)
 
-separator = Frame(height=15, bd=10, bg='DARKBLUE',relief=RAISED)
+ttk.Label(root, text='Extraction Utilities (Click and go for coffee)' ,font='Arial 12 bold' , background='LIGHTYELLOW', foreground='DARKBLUE').grid(row=17,column=0,sticky=N)
 
-separator.grid(row=13,column=0,ipadx=250, ipady=0)
+coffee=PhotoImage(file = r"coffee.png").subsample(6,9) 
 
-ttk.Label(root, text='Recursive Searches for Multiple Directories and GZIP Files',font='Arial 12 bold',  background='LIGHTYELLOW',foreground='DARKBLUE').grid(row=8, column=0, sticky=NE)
+ttk.Label(root, image=coffee, background='LIGHTGREEN').grid(row=17,column=0,sticky=W)
 
-b_rs.grid(row=10,column=0,sticky=N)
+b_xp.grid(row=18)
 
-separator = Frame(height=15, bd=10, bg='DARKBLUE',relief=RAISED)
-
-#separator.grid(row=17,column=0,sticky=N,ipadx=250, ipady=1)
-
-ttk.Label(root, text='Heavy Lifting Utilities (Click and go for coffee)' ,font='Arial 12 bold' , background='LIGHTYELLOW', foreground='DARKBLUE').grid(row=18,column=0,sticky=N)
-
-coffee=PhotoImage(file = r"coffee.png").subsample(9,12) 
-
-ttk.Label(root, image=coffee, background='LIGHTGREEN').grid(row=18,column=0,sticky=W)
-
-separator = Frame(height=15, bd=10,bg='DARKBLUE',relief=RAISED)
-
-separator.grid(row=19,column=0,ipadx=250,ipady=0,sticky=N)
-
-b_xp.grid(row=20)
-
-b_xpg.grid(row=21)
+b_xpg.grid(row=19)
 
 help_readtz_focus_label = tk.Label(text="", width=10, height=2)
 
