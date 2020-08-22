@@ -328,9 +328,9 @@ l['yscrollcommand'] = s.set
 root.bind("deleteButton", ondelete)
 root.bind("saveasButton", onsaveas)  
 deleteButton = Button(root, text='Delete', underline = 0, command=ondelete)
-deleteButton.grid(column=1, row=1, sticky="e", padx=10, pady=10)
+deleteButton.grid(column=1, row=1, sticky="se", padx=10, pady=10)
 saveasButton = Button(root, text='Save As', underline = 0, command=onsaveas)
-saveasButton.grid(column=0, row=1, sticky="e", padx=10, pady=10)
+saveasButton.grid(column=0, row=1, sticky="se", padx=10, pady=10)
 
-
+Button(root, text="Quit", command=root.destroy).grid(row=1,column=0,sticky="s")
 root.mainloop()
