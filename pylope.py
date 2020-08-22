@@ -178,11 +178,9 @@ class MainWindow():
         
             if p != [] and p != " " and p != "" and p != None:
         
-                b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
-        
-                b_dir.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
-        
-                b_rs.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE')
+                     
+       
+                b_rs.config(state=NORMAL, bg='DARKGREEN', fg='WHITE')
 
     #--------------------------------------#
     def set_callback(self, a_func):
@@ -278,11 +276,7 @@ class MyFrame(tk.Frame):
             p = []
         
             p_case = 0
-        
-            b_gz.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
-        
-            b_dir.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
-        
+               
             b_rs.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
         
             mf.mySubmitButton1.config(fg='DARKBLUE',bg='LIGHTGREEN',relief=RAISED, text='Click to ENTER a search string')
@@ -292,11 +286,7 @@ class MyFrame(tk.Frame):
             self.d.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
 
 
-        if  (p == [] or p == None or p == " " or p == '') and p_clear == 0:
-        
-            b_gz.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
-        
-            b_dir.config(state=DISABLED, bg='LIGHTGRAY', fg='DARKBLUE')
+
   
 #--------------------------------------#
     def get_group_name(self):
@@ -449,7 +439,6 @@ def extract_tar(file, call = 1):
 #--------------------------------------#
 def main_logic_tar_gz():
 #--------------------------------------#
-    b_gz.config(state=NORMAL, bg='RED', fg='WHITE', text = 'Currently Extracting a single tar.gz',font='Arial 8 bold')
 
     b_dir.config(state=DISABLED)
 
@@ -473,7 +462,6 @@ def main_logic_tar_gz():
 
         print("PYlope function: main_logic_tar_gz unable to change directory", directory)
 
-    b_gz.config(state=NORMAL, bg='LIGHTGREEN', fg='DARKBLUE', text='Open, extract and search single tar.gz', font='TkDefaultFont')
 
     b_dir.config(state=NORMAL)
 
@@ -626,7 +614,7 @@ def main_logic_recur_search(p_recur_search = 1, call=1):
 
         print(e)
 
-    b_rs.config(bg='LIGHTGREEN', fg='DARKBLUE', text = 'Recursively search a directory for a search string', font='TkDefaultFont')
+    b_rs.config(bg='DARKGREEN', fg='WHITE', text = 'Recursively search a directory for a search string', font='TkDefaultFont')
 
 #--------------------------------------#
 def help_reatz_focus(event=None):
@@ -654,9 +642,8 @@ def help_readtz_unfocus(event=None):
 
 mf = MyFrame(root)
 
-b_dir = tkinter.Button(root,state=DISABLED, text='Open and search SINGLE directory containing logs', command=main_logic_directory, width=40)
+#E0 b_dir = tkinter.Button(root,state=DISABLED, text='Open and search SINGLE directory containing logs', command=main_logic_directory, width=40)
 
-b_gz = tkinter.Button(root, state=DISABLED, text='Open, extract and search a SINGLE tar.gz', command=main_logic_tar_gz, width=40)
 
 b_rs = tkinter.Button(root, state=DISABLED, text = 'Recursively search a directory for a search string', command=main_logic_recur_search, width=40)
 
@@ -664,35 +651,24 @@ b_xp = tkinter.Button(root, text='Recursively extract >> ALL Tar.GZIP Files<< wi
 
 b_xpg = tkinter.Button(root, text='Recursively extract ALL Tar.GZIP Children within a tar.gz file', command=main_logic_xpg, bg='DARKGREEN', fg='WHITE', width=47,highlightcolor='DARKRED')
 
-ttk.Label(root, text='Search Utilities for Singleton Directory or GZIP File ',font='Arial 12 bold', background='LIGHTYELLOW', foreground='DARKBLUE').grid(row=8,column=0,sticky=N)
-
-look=PhotoImage(file = r"look.png").subsample(1,1) 
+look=PhotoImage(file = r"search.png").subsample(6,6) 
 
 ttk.Label(root, image=look,background='LIGHTGREEN').grid(row=8,column=0, sticky=W)
 
-b_dir.grid(row=11,column=0,sticky=N)
+#EO b_dir.grid(row=11,column=0,sticky=N)
 
-b_gz.grid(row=12,column=0,sticky=N)
 
 separator = Frame(height=15, bd=10, bg='DARKBLUE',relief=RAISED)
 
 separator.grid(row=13,column=0,ipadx=250, ipady=0)
 
-ttk.Label(root, text='Recursive Searches for Multiple Directories and GZIP Files',font='Arial 12 bold',  background='LIGHTYELLOW',foreground='DARKBLUE').grid(row=14, column=0, sticky=NE)
+ttk.Label(root, text='Recursive Searches for Multiple Directories and GZIP Files',font='Arial 12 bold',  background='LIGHTYELLOW',foreground='DARKBLUE').grid(row=8, column=0, sticky=NE)
+
+b_rs.grid(row=10,column=0,sticky=N)
 
 separator = Frame(height=15, bd=10, bg='DARKBLUE',relief=RAISED)
 
-separator.grid(row=15,column=0,ipadx=250,ipady=0)
-
-search=PhotoImage(file = r"search.png",).subsample(6,6) 
-
-ttk.Label(root, image=search, background = 'LIGHTGREEN').grid(row=14,sticky=W)
-
-b_rs.grid(row=16,column=0,sticky=N)
-
-separator = Frame(height=15, bd=10, bg='DARKBLUE',relief=RAISED)
-
-separator.grid(row=17,column=0,sticky=N,ipadx=250, ipady=1)
+#separator.grid(row=17,column=0,sticky=N,ipadx=250, ipady=1)
 
 ttk.Label(root, text='Heavy Lifting Utilities (Click and go for coffee)' ,font='Arial 12 bold' , background='LIGHTYELLOW', foreground='DARKBLUE').grid(row=18,column=0,sticky=N)
 
